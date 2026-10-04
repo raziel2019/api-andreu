@@ -1,0 +1,348 @@
+{
+  "ca": {
+    "nav": {
+      "home": "Inici",
+      "about": "Sobre mi",
+      "services": "Serveis",
+      "portfolio": "Portafoli",
+      "contact": "Contacte"
+    },
+    "ui": {
+      "languages": "Selecciona l’idioma",
+      "ca": "Canvia a català",
+      "es": "Canvia a castellà",
+      "openMenu": "Obre el menú",
+      "closeMenu": "Tanca el menú",
+      "navigation": "Navegació principal",
+      "social": "Xarxes socials",
+      "skip": "Salta al contingut",
+      "more": "Saber-ne més",
+      "talk": "Parlem-ne",
+      "contact": "Contacta amb mi",
+      "proposal": "Sol·licita una proposta",
+      "services": "Descobreix els meus serveis",
+      "brand": "Andreu Gurrera · Inici",
+      "instagram": "Instagram · Enllaç de perfil pendent",
+      "linkedin": "LinkedIn · Enllaç de perfil pendent",
+      "email": "Envia un correu"
+    },
+    "home": {
+      "title": "Arxiver, Gestor Documental | Especialista en Preservació del Patrimoni Documental",
+      "eyebrow": "Arxivística · Investigació · Patrimoni",
+      "body": {
+        "one": "Soc l’Andreu Gurrera, i treballo com a arxiver/gestor documental.",
+        "two": "Ajudo persones, entitats i institucions a organitzar, digitalitzar i posar en valor el seu patrimoni documental.",
+        "three": "Treballo en la intersecció entre la gestió d'arxius i la investigació històrica, trobant el fil que connecta els documents amb les persones i les històries que hi ha al darrere.",
+        "four": "Com et puc ajudar? Si tens un arxiu per ordenar, una història per investigar o documents que vols preservar, ets al lloc indicat."
+      },
+      "alt": "Llibres i fons documentals conservats en una biblioteca",
+      "caption": "El passat té molt a dir.",
+      "servicesTitle": "Com et puc ajudar?",
+      "servicesSubtitle": "Una mirada professional, un tracte proper",
+      "stories": "Històries que es conserven",
+      "storiesSubtitle": "Una aproximació a la meva feina",
+      "portfolioTitle": "Arxius i patrimoni documental",
+      "portfolioAlt": "Documents antics apilats",
+      "portfolioCta": "Explora el portafoli →"
+    },
+    "callout": {
+      "title": "Tens un projecte o una necessitat? Parlem-ne, sense compromís.",
+      "body": "Cada arxiu és un món. Explica’m el teu projecte i trobem la millor manera de cuidar-lo."
+    },
+    "footer": {
+      "description": "Arxivística, investigació i patrimoni documental.",
+      "cta": "Parlem del teu projecte",
+      "copyright": "© 2026 Andreu Gurrera"
+    },
+    "about": {
+      "title": "SOBRE MI",
+      "intro": {
+        "one": "Soc l'Andreu Gurrera — Arxiver, consultor documental i expert en recerca històrica.",
+        "two": "Et preguntes com transformar un arxiu desordenat o inaccessible en un actiu de valor? Ajudo particulars, empreses i administracions a organitzar, protegir i digitalitzar els seus fons documentals amb projectes clau en mà, eficients i orientats a resultats."
+      },
+      "benefitsTitle": "Què hi guanyes?",
+      "benefits": {
+        "one": "Tranquil·litat i seguretat: Un arxiu en conformitat amb la normativa legal i amb garantia de confidencialitat absoluta.",
+        "two": "Previsibilitat: Un pla d'actuació adaptat i un pressupost tancat des del primer dia, sense sorpreses.",
+        "three": "Eficiència: Un fons ordenat, accessible i preparat per als reptes del futur digital."
+      },
+      "methodTitle": "Com treballo?",
+      "methodBody": "Treballo de manera independent amb un enfocament 100% pràctic i sota confidencialitat absoluta:",
+      "steps": {
+        "one": "Diagnòstic inicial: Analitzo i estudio ad honorem (de manera totalment gratuïta) la situació en què es troba el teu fons o arxiu.",
+        "two": "Pla d'actuació: Definim un full de ruta clar amb un pressupost tancat, sense sorpreses.",
+        "three": "Lliurament final: Rebràs un arxiu o fons perfectament organitzat, legalment segur i preparat per al futur digital (inventariat i, si escau, digitalitzat) en la forma i el temps acordats."
+      },
+      "alt": "Prestatgeries de llibres antics en una biblioteca històrica",
+      "caption": "Un espai per escoltar les històries que els documents conserven."
+    },
+    "services": {
+      "title": "SERVEIS",
+      "lead": "El teu patrimoni, en bones mans.",
+      "description": "Des de posar ordre a un arxiu fins a reconstruir una història familiar, t'acompanyo amb solucions personalitzades per conservar els teus documents, fer-los accessibles i posar-los en valor.",
+      "alt": "Conjunt de documents preparats per classificar",
+      "heading": "Serveis principals",
+      "subtitle": "Serveis d'arxivística i recerca per a persones, entitats i institucions"
+    },
+    "portfolio": {
+      "construction": "En construcció",
+      "title": "Portafoli",
+      "body": "Estic donant els últims retocs a aquesta pàgina. Dona un cop d'ull a la resta del meu web mentre acabo d'enllestir-la! Mentrestant, pots mirar el meu perfil professional a LinkedIn."
+    },
+    "contact": {
+      "description": "Explica’m què tens entre mans: un fons per organitzar, una història per investigar o documents que vols conservar. T’ajudaré a trobar el millor punt de partida.",
+      "location": "Catalunya · Projectes presencials i a distància",
+      "conversation": "No cal tenir totes les respostes. Comencem amb una conversa.",
+      "serviceLegend": "Quin servei o serveis t’interessen?",
+      "openMail": "Obre el correu preparat",
+      "ready": "El correu està preparat. Obre’l a la teva aplicació de correu per revisar-lo i enviar-lo.",
+      "title": "Contacte",
+      "intro": "Tens un projecte o una necessitat? Parlem-ne, sense compromís.",
+      "name": "Nom",
+      "email": "Correu electrònic",
+      "service": "Servei",
+      "message": "Missatge",
+      "submit": "Prepara el correu",
+      "notice": "El formulari prepara un correu a la teva aplicació de correu.",
+      "subject": "Consulta sobre un projecte",
+      "required": "Completa aquest camp.",
+      "invalidEmail": "Introdueix una adreça de correu vàlida.",
+      "unconfigured": "El correu de contacte no està disponible ara mateix. Torna-ho a provar més endavant.",
+      "options": {
+        "organization": "Organització i gestió d'arxius (físics i administratius)",
+        "citizenship": "Nacionalitat i Memòria Democràtica (Llei 20/2022, cerca de baptismes/naixements)",
+        "research": "Recerca històrica i genealogia (història familiar, fons locals, exposicions)",
+        "digitization": "Digitalització i preservació digital (passar a digital amb criteris d'arxiu)",
+        "advice": "Consultoria i assessorament (diagnòstic, plans de conservació, formació)",
+        "other": "Altres / Projecte a mida"
+      }
+    },
+    "summaries": {
+      "organization": {
+        "title": "Organització i quadres de classificació d'arxius",
+        "description": "Cada document, al seu lloc."
+      },
+      "digitization": {
+        "title": "Projectes de digitalització i preservació",
+        "description": "Preservar avui. Compartir demà."
+      },
+      "research": {
+        "title": "Recerca i investigació de la memòria històrica",
+        "description": "Les històries que encara no coneixes."
+      }
+    },
+    "details": {
+      "advice": {
+        "title": "Consultoria i Assessorament Especialitzat",
+        "subtitle": "Acompanyament estratègic per a una gestió documental eficient i segura.",
+        "description": "Oferim criteri tècnic i solucions adaptades per ajudar-te a prendre les millors decisions sobre la conservació, la normativa i la posada en valor del teu fons documental.",
+        "features": {
+          "one": "Diagnosi i auditories documentals: Anàlisi de la situació actual i identificació de necessitats crítiques.",
+          "two": "Plans de conservació preventiva: Disseny de protocols per garantir la preservació física i digital a llarg termini.",
+          "three": "Acompanyament i formació a mida: Assessorament continuat i capacitació tècnica per a equips i responsables d'arxiu."
+        }
+      },
+      "organization": {
+        "title": "Organització i gestió d'arxius",
+        "description": "Ordenació, classificació i descripció de fons documentals. Transformem un conjunt de papers desordenat en un arxiu accessible, funcional i amb sentit.",
+        "features": {
+          "one": "Classificació i inventari de documents: Organització sistemàtica per localitzar qualsevol document de manera ràpida i eficient.",
+          "two": "Descripció de fons i col·leccions: Creació de catàlegs i instruments de descripció adaptats a cada tipologia documental.",
+          "three": "Gestió documental: Implantació de criteris d'organització, fluxos de treball i manteniment per a un arxiu al dia."
+        }
+      },
+      "digitization": {
+        "title": "Digitalització i Patrimoni Digital",
+        "subtitle": "Protegeix el teu fons del pas del temps i fes-lo accessible amb un sol clic.",
+        "description": "Convertim el teu patrimoni físic en un arxiu digital organitzat, segur i fàcil de consultar, respectant en tot moment la integritat del document original.",
+        "features": {
+          "one": "Captura de qualitat i preservació: Digitalització adaptada a documents fràgils, fotografies i fons de gran format.",
+          "two": "Estructura i ordre digital: Creació d'un arxiu digital intuïtiu, sense duplicats i fàcil de navegar.",
+          "three": "Metadades i eines de cerca: Incorporació de dades descriptives per trobar qualsevol document en pocs segons."
+        }
+      },
+      "research": {
+        "title": "Recerca Històrica i Ciutadania",
+        "description": "Recerca en arxius per a la tramitació de drets de ciutadania, reconstrucció genealògica i estudis patrimonials.",
+        "features": {
+          "one": "Nacionalitat i Llei de Memòria Democràtica (Llei 20/2022): Localitzo la documentació oficial d'avantpassats exiliats o emigrats (actes de naixement, baptismes, registres civils) necessària per als expedients de nacionalitat espanyola.",
+          "two": "Genealogia i història familiar: Disseny i confecció d'arbres genealògics a mida.",
+          "three": "Recerca arxivística i patrimoni local: Investigació i redacció per a projectes de memòria històrica i local."
+        }
+      }
+    }
+  },
+  "es": {
+    "nav": {
+      "home": "Inicio",
+      "about": "Sobre mí",
+      "services": "Servicios",
+      "portfolio": "Portafolio",
+      "contact": "Contacto"
+    },
+    "ui": {
+      "languages": "Selecciona el idioma",
+      "ca": "Cambiar a catalán",
+      "es": "Cambiar a castellano",
+      "openMenu": "Abrir menú",
+      "closeMenu": "Cerrar menú",
+      "navigation": "Navegación principal",
+      "social": "Redes sociales",
+      "skip": "Saltar al contenido",
+      "more": "Saber más",
+      "talk": "Hablemos",
+      "contact": "Contacta conmigo",
+      "proposal": "Solicita una propuesta",
+      "services": "Descubre mis servicios",
+      "brand": "Andreu Gurrera · Inicio",
+      "instagram": "Instagram · Enlace de perfil pendiente",
+      "linkedin": "LinkedIn · Enlace de perfil pendiente",
+      "email": "Enviar un correo"
+    },
+    "home": {
+      "title": "Archivero, Gestor Documental | Especialista en Preservación del Patrimonio Documental",
+      "eyebrow": "Archivística · Investigación · Patrimonio",
+      "body": {
+        "one": "Soy Andreu Gurrera y trabajo como archivero/gestor documental.",
+        "two": "Ayudo a personas, entidades e instituciones a organizar, digitalizar y poner en valor su patrimonio documental.",
+        "three": "Trabajo en la intersección entre la gestión de archivos y la investigación histórica, encontrando el hilo que conecta los documentos con las personas y las historias que hay detrás.",
+        "four": "¿Cómo puedo ayudarte? Si tienes un archivo que ordenar, una historia que investigar o documentos que quieres preservar, estás en el lugar indicado."
+      },
+      "alt": "Libros y fondos documentales conservados en una biblioteca",
+      "caption": "El pasado tiene mucho que decir.",
+      "servicesTitle": "¿Cómo puedo ayudarte?",
+      "servicesSubtitle": "Una mirada profesional, un trato cercano",
+      "stories": "Historias que se conservan",
+      "storiesSubtitle": "Una aproximación a mi trabajo",
+      "portfolioTitle": "Archivos y patrimonio documental",
+      "portfolioAlt": "Documentos antiguos apilados",
+      "portfolioCta": "Explora el portafolio →"
+    },
+    "callout": {
+      "title": "¿Tienes un proyecto o una necesidad? Hablemos, sin compromiso.",
+      "body": "Cada archivo es un mundo. Cuéntame tu proyecto y encontremos la mejor manera de cuidarlo."
+    },
+    "footer": {
+      "description": "Archivística, investigación y patrimonio documental.",
+      "cta": "Hablemos de tu proyecto",
+      "copyright": "© 2026 Andreu Gurrera"
+    },
+    "about": {
+      "title": "SOBRE MÍ",
+      "intro": {
+        "one": "Soy Andreu Gurrera — Archivero, consultor documental y experto en investigación histórica.",
+        "two": "¿Te preguntas cómo transformar un archivo desordenado o inaccesible en un activo de valor? Ayudo a particulares, empresas y administraciones a organizar, proteger y digitalizar sus fondos documentales con proyectos llave en mano, eficientes y orientados a resultados."
+      },
+      "benefitsTitle": "¿Qué ganas?",
+      "benefits": {
+        "one": "Tranquilidad y seguridad: Un archivo conforme a la normativa legal y con garantía de confidencialidad absoluta.",
+        "two": "Previsibilidad: Un plan de actuación adaptado y un presupuesto cerrado desde el primer día, sin sorpresas.",
+        "three": "Eficiencia: Un fondo ordenado, accesible y preparado para los retos del futuro digital."
+      },
+      "methodTitle": "¿Cómo trabajo?",
+      "methodBody": "Trabajo de manera independiente con un enfoque 100% práctico y bajo confidencialidad absoluta:",
+      "steps": {
+        "one": "Diagnóstico inicial: Analizo y estudio ad honorem (de manera totalmente gratuita) la situación en la que se encuentra tu fondo o archivo.",
+        "two": "Plan de actuación: Definimos una hoja de ruta clara con un presupuesto cerrado, sin sorpresas.",
+        "three": "Entrega final: Recibirás un archivo o fondo perfectamente organizado, legalmente seguro y preparado para el futuro digital (inventariado y, si procede, digitalizado) en la forma y el plazo acordados."
+      },
+      "alt": "Estanterías de libros antiguos en una biblioteca histórica",
+      "caption": "Un espacio para escuchar las historias que los documentos conservan."
+    },
+    "services": {
+      "title": "SERVICIOS",
+      "lead": "Tu patrimonio, en buenas manos.",
+      "description": "Desde poner orden en un archivo hasta reconstruir una historia familiar, te acompaño con soluciones personalizadas para conservar tus documentos, hacerlos accesibles y ponerlos en valor.",
+      "alt": "Conjunto de documentos preparados para clasificar",
+      "heading": "Servicios principales",
+      "subtitle": "Servicios de archivística e investigación para personas, entidades e instituciones"
+    },
+    "portfolio": {
+      "construction": "En construcción",
+      "title": "Portafolio",
+      "body": "Estoy dando los últimos retoques a esta página. ¡Echa un vistazo al resto de mi web mientras termino de prepararla! Mientras tanto, puedes consultar mi perfil profesional en LinkedIn."
+    },
+    "contact": {
+      "description": "Cuéntame qué tienes entre manos: un fondo que organizar, una historia que investigar o documentos que quieres conservar. Te ayudaré a encontrar el mejor punto de partida.",
+      "location": "Cataluña · Proyectos presenciales y a distancia",
+      "conversation": "No hace falta tener todas las respuestas. Empecemos con una conversación.",
+      "serviceLegend": "¿Qué servicio o servicios te interesan?",
+      "openMail": "Abre el correo preparado",
+      "ready": "El correo está preparado. Ábrelo en tu aplicación de correo para revisarlo y enviarlo.",
+      "title": "Contacto",
+      "intro": "¿Tienes un proyecto o una necesidad? Hablemos, sin compromiso.",
+      "name": "Nombre",
+      "email": "Correo electrónico",
+      "service": "Servicio",
+      "message": "Mensaje",
+      "submit": "Prepara el correo",
+      "notice": "El formulario prepara un correo en tu aplicación de correo.",
+      "subject": "Consulta sobre un proyecto",
+      "required": "Completa este campo.",
+      "invalidEmail": "Introduce una dirección de correo válida.",
+      "unconfigured": "El correo de contacto no está disponible en este momento. Vuelve a intentarlo más adelante.",
+      "options": {
+        "organization": "Organización y gestión de archivos (físicos y administrativos)",
+        "citizenship": "Nacionalidad y Memoria Democrática (Ley 20/2022, búsqueda de bautismos/nacimientos)",
+        "research": "Investigación histórica y genealogía (historia familiar, fondos locales, exposiciones)",
+        "digitization": "Digitalización y preservación digital (pasar a digital con criterios archivísticos)",
+        "advice": "Consultoría y asesoramiento (diagnóstico, planes de conservación, formación)",
+        "other": "Otros / Proyecto a medida"
+      }
+    },
+    "summaries": {
+      "organization": {
+        "title": "Organización y cuadros de clasificación de archivos",
+        "description": "Cada documento, en su lugar."
+      },
+      "digitization": {
+        "title": "Proyectos de digitalización y preservación",
+        "description": "Preservar hoy. Compartir mañana."
+      },
+      "research": {
+        "title": "Búsqueda e investigación de la memoria histórica",
+        "description": "Las historias que aún no conoces."
+      }
+    },
+    "details": {
+      "advice": {
+        "title": "Consultoría y Asesoramiento Especializado",
+        "subtitle": "Acompañamiento estratégico para una gestión documental eficiente y segura.",
+        "description": "Ofrecemos criterio técnico y soluciones adaptadas para ayudarte a tomar las mejores decisiones sobre la conservación, la normativa y la puesta en valor de tu fondo documental.",
+        "features": {
+          "one": "Diagnóstico y auditorías documentales: Análisis de la situación actual e identificación de necesidades críticas.",
+          "two": "Planes de conservación preventiva: Diseño de protocolos para garantizar la preservación física y digital a largo plazo.",
+          "three": "Acompañamiento y formación a medida: Asesoramiento continuado y capacitación técnica para equipos y responsables de archivo."
+        }
+      },
+      "organization": {
+        "title": "Organización y gestión de archivos",
+        "description": "Ordenación, clasificación y descripción de fondos documentales. Transformamos un conjunto de papeles desordenado en un archivo accesible, funcional y con sentido.",
+        "features": {
+          "one": "Clasificación e inventario de documentos: Organización sistemática para localizar cualquier documento de manera rápida y eficiente.",
+          "two": "Descripción de fondos y colecciones: Creación de catálogos e instrumentos de descripción adaptados a cada tipología documental.",
+          "three": "Gestión documental: Implantación de criterios de organización, flujos de trabajo y mantenimiento para un archivo al día."
+        }
+      },
+      "digitization": {
+        "title": "Digitalización y Patrimonio Digital",
+        "subtitle": "Protege tu fondo del paso del tiempo y hazlo accesible con un solo clic.",
+        "description": "Convertimos tu patrimonio físico en un archivo digital organizado, seguro y fácil de consultar, respetando en todo momento la integridad del documento original.",
+        "features": {
+          "one": "Captura de calidad y preservación: Digitalización adaptada a documentos frágiles, fotografías y fondos de gran formato.",
+          "two": "Estructura y orden digital: Creación de un archivo digital intuitivo, sin duplicados y fácil de navegar.",
+          "three": "Metadatos y herramientas de búsqueda: Incorporación de datos descriptivos para encontrar cualquier documento en pocos segundos."
+        }
+      },
+      "research": {
+        "title": "Investigación Histórica y Ciudadanía",
+        "description": "Investigación en archivos para la tramitación de derechos de ciudadanía, reconstrucción genealógica y estudios patrimoniales.",
+        "features": {
+          "one": "Nacionalidad y Ley de Memoria Democrática (Ley 20/2022): Localizo la documentación oficial de antepasados exiliados o emigrados (actas de nacimiento, bautismos, registros civiles) necesaria para los expedientes de nacionalidad española.",
+          "two": "Genealogía e historia familiar: Diseño y elaboración de árboles genealógicos a medida.",
+          "three": "Investigación archivística y patrimonio local: Investigación y redacción para proyectos de memoria histórica y local."
+        }
+      }
+    }
+  }
+}
