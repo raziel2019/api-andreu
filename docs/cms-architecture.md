@@ -53,7 +53,7 @@ Navigation: Inicio, Sobre mi, Serveis, Portafoli, Contacte, Configuració.
 - `/admin/settings`: contact email, phone, CA/ES location, HTTP/HTTPS social URLs, logo upload/removal and translated shared callout/footer copy with destinations. Empty contact values remain allowed. `PUT /admin/settings` saves changes.
 - `/admin/about`: full copy/image editor and add/edit/remove/reorder benefits and working-method steps.
 - `/admin/services`: service list and bulk ordering; create/edit/delete services, visibility and repeatable features. `/admin/services/page` edits the Services page introduction, image/accessibility copy and CTA.
-- `/admin/portfolio`: construction-only page copy, visibility flag and optional CTA/LinkedIn destinations. Project management is explicitly outside scope.
+- `/admin/portfolio`: construction-only page copy, under-construction flag and optional CTA/LinkedIn destinations. Project management is explicitly outside scope.
 - `/admin/contact`: complete page copy plus contact-option list/order controls; `/admin/contact/options/create` and per-option edit screens manage bilingual labels, visibility and confirmed deletion.
 
 Phase 2 reuses all Phase 1 models, relationships, migrations, approved seeds, auth and API Resources. No packages or environment variables were added. See [Phase 2 implementation](cms-phase-two.md) for forms, file inventory and verification.
@@ -135,3 +135,9 @@ SiteSetting adds nullable, admin-only legal/business name, tax identifier, posta
 `POST /api/v1/contact/verify` accepts `{ "token": "<Turnstile token>" }`. Laravel validates the input and POSTs the token, backend-only `TURNSTILE_SECRET_KEY` and request IP to Cloudflare Siteverify through the Laravel HTTP client. Only an HTTP-success response containing boolean `success: true` permits the frontend to prepare its existing mailto. Tokens are neither cached nor accepted locally: Cloudflare rejects invalid, expired and reused tokens. No email is sent and no contact submission is persisted.
 
 The endpoint limits every attempt to five per minute per IP. Missing configuration, upstream errors/timeouts and malformed responses fail closed with 503; invalid input or failed verification returns 422; throttling returns 429. Responses contain only a success boolean. Connection/total timeouts are three/five seconds, TLS verification remains enabled, and single-use validation is not automatically retried. See [Turnstile setup and contract](turnstile.md).
+
+## Central page visibility
+
+`/admin/pages/visibility` provides session-authenticated, Gate-authorized controls for Home, About, Services, Portfolio, Contact, Legal Notice, Privacy and Cookies. A new migration adds default-true boolean `active` to the five singleton page models; LegalPage reuses its existing field. Hidden pages remain editable and retain all editorial content, child records and media. Legal publication validation is preserved.
+
+Public page endpoints return 404 when hidden, including the complete Services response. Home never redirects. `/api/v1/site` adds `data.pages`, an eight-key boolean map (`home`, `about`, `services`, `portfolio`, `contact`, `legal_notice`, `privacy`, `cookies`) for public navigation/footer integration. Missing records report false. Reseeding preserves visibility choices; legal seeds remain inactive drafts. See [page visibility](page-visibility.md) for the contract, rollout and frontend expectations. Vue is unchanged.

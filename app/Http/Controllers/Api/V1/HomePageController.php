@@ -10,6 +10,6 @@ class HomePageController extends Controller
 {
     public function show(): HomePageResource
     {
-        return new HomePageResource(HomePage::query()->with(['serviceSummaries'])->findOrFail(1));
+        return new HomePageResource(HomePage::query()->where('active', true)->with(['serviceSummaries'])->findOrFail(1));
     }
 }

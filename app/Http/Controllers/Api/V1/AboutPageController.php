@@ -10,6 +10,6 @@ class AboutPageController extends Controller
 {
     public function show(): AboutPageResource
     {
-        return new AboutPageResource(AboutPage::query()->with(['benefits', 'workingMethodSteps'])->findOrFail(1));
+        return new AboutPageResource(AboutPage::query()->where('active', true)->with(['benefits', 'workingMethodSteps'])->findOrFail(1));
     }
 }

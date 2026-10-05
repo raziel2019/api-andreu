@@ -13,9 +13,11 @@ class ServiceController extends Controller
 {
     public function index(): JsonResponse
     {
+        $page = ServicePage::where('active', true)->findOrFail(1);
+
         return response()->json([
             'data' => ServiceResource::collection(Service::with('features')->where('active', true)->orderBy('sort_order')->orderBy('id')->get()),
-            'meta' => ['locale' => app()->getLocale(), 'page' => new ServicePageResource(ServicePage::findOrFail(1))],
+            'meta' => ['locale' => app()->getLocale(), 'page' => new ServicePageResource($page)],
         ]);
     }
 }

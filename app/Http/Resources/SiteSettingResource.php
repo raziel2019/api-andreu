@@ -12,6 +12,7 @@ class SiteSettingResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'pages' => $this->pages,
             'location' => $this->resource->translated('location', app()->getLocale()),
             'callout_title' => $this->resource->translated('callout_title', app()->getLocale()),
             'callout_content' => $this->resource->translated('callout_content', app()->getLocale()),

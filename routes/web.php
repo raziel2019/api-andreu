@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ContactServiceOptionOrderController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\HomePageController;
 use App\Http\Controllers\Admin\LegalPageController;
+use App\Http\Controllers\Admin\PageVisibilityController;
 use App\Http\Controllers\Admin\PortfolioPageController;
 use App\Http\Controllers\Admin\SectionController;
 use App\Http\Controllers\Admin\ServiceController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\Admin\ServicePageController;
 use App\Http\Controllers\Admin\SessionController;
 use App\Http\Controllers\Admin\SiteSettingController;
 use App\Models\LegalPage;
+use App\Services\PageVisibility;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => view('welcome'));
@@ -26,6 +28,8 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
     });
     Route::post('/logout', [SessionController::class, 'destroy'])->middleware('auth')->name('logout');
     Route::middleware(['auth', 'can:access-admin'])->group(function (): void {
+        Route::get('/pages/visibility', [PageVisibilityController::class, 'index'])->name('pages.visibility.index');
+        Route::put('/pages/visibility/{page}', [PageVisibilityController::class, 'update'])->whereIn('page', array_keys(PageVisibility::LABELS))->name('pages.visibility.update');
         Route::get('/legal/{section}', [LegalPageController::class, 'edit'])->whereIn('section', array_keys(LegalPage::TYPES))->name('legal.edit');
         Route::put('/legal/{section}', [LegalPageController::class, 'update'])->whereIn('section', array_keys(LegalPage::TYPES))->name('legal.update');
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');

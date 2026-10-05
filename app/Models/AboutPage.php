@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['title', 'introduction', 'image_alt', 'image_caption', 'benefits_heading', 'working_method_heading', 'working_method_introduction', 'image_path'])]
+#[Fillable(['active', 'title', 'introduction', 'image_alt', 'image_caption', 'benefits_heading', 'working_method_heading', 'working_method_introduction', 'image_path'])]
 class AboutPage extends Model
 {
     /** @use HasFactory<AboutPageFactory> */
@@ -18,6 +18,7 @@ class AboutPage extends Model
     protected function casts(): array
     {
         return [
+            'active' => 'boolean',
             'title' => 'array',
             'introduction' => 'array',
             'image_alt' => 'array',

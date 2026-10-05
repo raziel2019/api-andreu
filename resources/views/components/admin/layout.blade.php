@@ -22,6 +22,7 @@
             <a href="{{ route('admin.legal.edit', 'legal-notice') }}">Avís legal</a>
             <a href="{{ route('admin.legal.edit', 'privacy') }}">Privacitat</a>
             <a href="{{ route('admin.legal.edit', 'cookies') }}">Cookies</a>
+            <a href="{{ route('admin.pages.visibility.index') }}">Visibilitat de pàgines</a>
             <a href="{{ route('admin.settings.edit') }}">Configuració</a>
         </nav>
         <form method="POST" action="{{ route('admin.logout') }}">@csrf<button type="submit">Surt</button></form>

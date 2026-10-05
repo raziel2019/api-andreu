@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['title', 'subtitle', 'lead', 'description', 'heading', 'image_alt', 'cta_label', 'image_path', 'cta_destination'])]
+#[Fillable(['active', 'title', 'subtitle', 'lead', 'description', 'heading', 'image_alt', 'cta_label', 'image_path', 'cta_destination'])]
 class ServicePage extends Model
 {
     /** @use HasFactory<ServicePageFactory> */
@@ -17,6 +17,7 @@ class ServicePage extends Model
     protected function casts(): array
     {
         return [
+            'active' => 'boolean',
             'title' => 'array',
             'subtitle' => 'array',
             'lead' => 'array',

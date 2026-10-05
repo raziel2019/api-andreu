@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['title', 'construction_label', 'message', 'cta_label', 'cta_destination', 'linkedin_destination', 'under_construction'])]
+#[Fillable(['active', 'title', 'construction_label', 'message', 'cta_label', 'cta_destination', 'linkedin_destination', 'under_construction'])]
 class PortfolioPage extends Model
 {
     /** @use HasFactory<PortfolioPageFactory> */
@@ -17,6 +17,7 @@ class PortfolioPage extends Model
     protected function casts(): array
     {
         return [
+            'active' => 'boolean',
             'title' => 'array',
             'construction_label' => 'array',
             'message' => 'array',

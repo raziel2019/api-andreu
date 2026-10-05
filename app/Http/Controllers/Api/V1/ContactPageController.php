@@ -10,6 +10,6 @@ class ContactPageController extends Controller
 {
     public function show(): ContactPageResource
     {
-        return new ContactPageResource(ContactPage::query()->with(['serviceOptions' => fn ($query) => $query->where('active', true)])->findOrFail(1));
+        return new ContactPageResource(ContactPage::query()->where('active', true)->with(['serviceOptions' => fn ($query) => $query->where('active', true)])->findOrFail(1));
     }
 }

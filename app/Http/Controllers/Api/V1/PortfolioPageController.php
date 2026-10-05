@@ -10,6 +10,6 @@ class PortfolioPageController extends Controller
 {
     public function show(): PortfolioPageResource
     {
-        return new PortfolioPageResource(PortfolioPage::query()->findOrFail(1));
+        return new PortfolioPageResource(PortfolioPage::query()->where('active', true)->findOrFail(1));
     }
 }
