@@ -1,7 +1,7 @@
-<x-admin.layout :title="$option->exists ? 'Edita l’opció' : 'Nova opció'">
+<x-admin.layout save-form="cms-editor" :title="$option->exists ? 'Edita l’opció' : 'Nova opció'">
     <h1>{{ $option->exists ? 'Edita l’opció' : 'Nova opció' }}</h1>
     <p><a href="{{ route('admin.contact.edit') }}">Torna a Contacte</a></p>
-    <form method="POST" action="{{ $option->exists ? route('admin.contact.options.update', $option) : route('admin.contact.options.store') }}">
+    <form id="cms-editor" method="POST" action="{{ $option->exists ? route('admin.contact.options.update', $option) : route('admin.contact.options.store') }}">
         @csrf @if($option->exists) @method('PUT') @endif
         <x-admin.translated-field name="label" label="Text de l’opció" :value="$option->label" />
         <x-admin.active-field :value="$option->active" />

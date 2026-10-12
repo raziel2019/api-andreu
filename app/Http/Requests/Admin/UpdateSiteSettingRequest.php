@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use App\Rules\CmsDestination;
+use App\Services\InterfaceMediaSlots;
 
 class UpdateSiteSettingRequest extends CmsFormRequest
 {
@@ -20,7 +21,13 @@ class UpdateSiteSettingRequest extends CmsFormRequest
             }
         }
 
+        $mediaRules = [];
+        foreach (array_keys(InterfaceMediaSlots::LABELS) as $key) {
+            $mediaRules = [...$mediaRules, ...$this->imageRules('interface_'.$key)];
+        }
+
         return [
+            ...$mediaRules,
             ...$shared,
             'legal_name' => ['sometimes', 'nullable', 'string', 'max:255'],
             'tax_identifier' => ['sometimes', 'nullable', 'string', 'max:255'],

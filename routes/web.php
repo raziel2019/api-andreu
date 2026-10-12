@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\Admin\AboutPageController;
+use App\Http\Controllers\Admin\AppearanceController;
 use App\Http\Controllers\Admin\ContactPageController;
 use App\Http\Controllers\Admin\ContactServiceOptionController;
 use App\Http\Controllers\Admin\ContactServiceOptionOrderController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\HomePageController;
 use App\Http\Controllers\Admin\LegalPageController;
+use App\Http\Controllers\Admin\MediaLibraryController;
 use App\Http\Controllers\Admin\PageVisibilityController;
 use App\Http\Controllers\Admin\PortfolioPageController;
 use App\Http\Controllers\Admin\SectionController;
@@ -28,6 +30,12 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
     });
     Route::post('/logout', [SessionController::class, 'destroy'])->middleware('auth')->name('logout');
     Route::middleware(['auth', 'can:access-admin'])->group(function (): void {
+        Route::get('/content', [DashboardController::class, 'content'])->name('content.index');
+        Route::post('/media', [MediaLibraryController::class, 'store'])->name('media.store');
+        Route::get('/media', [MediaLibraryController::class, 'index'])->name('media.index');
+        Route::put('/media/{slot}', [MediaLibraryController::class, 'update'])->name('media.update');
+        Route::get('/appearance', [AppearanceController::class, 'edit'])->name('appearance.index');
+        Route::put('/appearance', [AppearanceController::class, 'update'])->name('appearance.update');
         Route::get('/pages/visibility', [PageVisibilityController::class, 'index'])->name('pages.visibility.index');
         Route::put('/pages/visibility/{page}', [PageVisibilityController::class, 'update'])->whereIn('page', array_keys(PageVisibility::LABELS))->name('pages.visibility.update');
         Route::get('/legal/{section}', [LegalPageController::class, 'edit'])->whereIn('section', array_keys(LegalPage::TYPES))->name('legal.edit');

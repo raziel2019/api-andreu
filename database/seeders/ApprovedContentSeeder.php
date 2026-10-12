@@ -9,6 +9,7 @@ use App\Models\PortfolioPage;
 use App\Models\Service;
 use App\Models\ServicePage;
 use App\Models\SiteSetting;
+use App\Services\HomeSummaryIcons;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -71,13 +72,16 @@ class ApprovedContentSeeder extends Seeder
                 'cta_destination' => '/contacto',
             ]);
             if ($home->wasRecentlyCreated) {
-                foreach (['organization', 'digitization', 'research'] as $order => $slug) {
+                $sortOrder = 0;
+                foreach (['organization' => 'archive', 'digitization' => 'scan', 'research' => 'search', 'advice' => 'book-open'] as $slug => $icon) {
+                    $contentPath = $slug === 'advice' ? 'details.advice' : 'summaries.'.$slug;
                     $home->serviceSummaries()->create([
                         'slug' => $slug,
-                        'title' => $translated('summaries.'.$slug.'.title'),
-                        'description' => $translated('summaries.'.$slug.'.description'),
-                        'icon_path' => 'seed/summary-'.$slug.'.svg',
-                        'sort_order' => $order,
+                        'title' => $translated($contentPath.'.title'),
+                        'description' => $translated($contentPath.'.description'),
+                        'icon' => $icon,
+                        'icon_path' => HomeSummaryIcons::OPTIONS[$icon]['path'],
+                        'sort_order' => $sortOrder++,
                     ]);
                 }
             }
@@ -146,5 +150,6 @@ class ApprovedContentSeeder extends Seeder
                 }
             }
         });
+        $this->call(MediaAssetSeeder::class);
     }
 }

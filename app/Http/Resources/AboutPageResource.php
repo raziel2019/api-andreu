@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources;
 
+use App\Services\CmsMedia;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 class AboutPageResource extends JsonResource
 {
@@ -19,7 +19,7 @@ class AboutPageResource extends JsonResource
             'benefits_heading' => $this->resource->translated('benefits_heading', app()->getLocale()),
             'working_method_heading' => $this->resource->translated('working_method_heading', app()->getLocale()),
             'working_method_introduction' => $this->resource->translated('working_method_introduction', app()->getLocale()),
-            'image_url' => $this->image_path ? Storage::disk('public')->url($this->image_path) : null,
+            'image_url' => CmsMedia::publicUrl($this->image_path),
             'benefits' => AboutBenefitResource::collection($this->whenLoaded('benefits')),
             'working_method_steps' => WorkingMethodStepResource::collection($this->whenLoaded('workingMethodSteps')),
         ];

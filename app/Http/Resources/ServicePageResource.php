@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources;
 
+use App\Services\CmsMedia;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 class ServicePageResource extends JsonResource
 {
@@ -19,7 +19,7 @@ class ServicePageResource extends JsonResource
             'heading' => $this->resource->translated('heading', app()->getLocale()),
             'image_alt' => $this->resource->translated('image_alt', app()->getLocale()),
             'cta_label' => $this->resource->translated('cta_label', app()->getLocale()),
-            'image_url' => $this->image_path ? Storage::disk('public')->url($this->image_path) : null,
+            'image_url' => CmsMedia::publicUrl($this->image_path),
             'cta_destination' => $this->cta_destination,
         ];
     }

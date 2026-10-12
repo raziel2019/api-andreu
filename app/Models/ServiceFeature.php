@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable(['content', 'sort_order', 'service_id'])]
+#[Fillable(['icon_path', 'content', 'sort_order', 'service_id'])]
 class ServiceFeature extends Model
 {
     /** @use HasFactory<ServiceFeatureFactory> */

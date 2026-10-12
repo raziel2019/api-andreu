@@ -100,7 +100,7 @@ class ServiceAdminTest extends TestCase
 
         $this->assertModelMissing($service);
         $this->assertDatabaseMissing('service_features', ['service_id' => $service->id]);
-        Storage::disk('public')->assertMissing('seed/service-advice.svg');
+        Storage::disk('public')->assertExists('seed/service-advice.svg');
     }
 
     public function test_features_from_other_services_cannot_be_reassigned(): void

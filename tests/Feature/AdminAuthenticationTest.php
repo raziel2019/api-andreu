@@ -31,7 +31,7 @@ class AdminAuthenticationTest extends TestCase
         $this->seed(ApprovedContentSeeder::class);
         $user = User::factory()->administrator()->create();
 
-        $this->actingAs($user)->get($path)->assertOk()->assertSee('Configuració')->assertSee('Portafoli');
+        $this->actingAs($user)->get($path)->assertOk()->assertSee('Identidad y contacto')->assertSee('Contenidos y traducciones');
     }
 
     public function test_an_administrator_can_log_in_with_a_session(): void
@@ -41,7 +41,7 @@ class AdminAuthenticationTest extends TestCase
         $this->post('/admin/login', ['email' => $user->email, 'password' => 'password'])->assertRedirect('/admin');
 
         $this->assertAuthenticatedAs($user);
-        $this->get('/admin')->assertOk()->assertSee('Tauler d’administració');
+        $this->get('/admin')->assertOk()->assertSee('Un lugar para cuidar tu web.');
     }
 
     public function test_wrong_password_is_rejected(): void

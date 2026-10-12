@@ -1,7 +1,7 @@
-<x-admin.layout title="Inicio">
+<x-admin.layout save-form="cms-editor" title="Inicio">
     <h1>Inicio</h1>
     <p>El català és el contingut original. Completa també la traducció al castellà.</p>
-    <form method="POST" action="{{ route('admin.home.update') }}" enctype="multipart/form-data">
+    <form id="cms-editor" method="POST" action="{{ route('admin.home.update') }}" enctype="multipart/form-data">
         @csrf @method('PUT')
         <x-admin.translated-field name="hero_title" label="Títol principal" :value="old('hero_title', $home->hero_title)" />
         <x-admin.translated-field name="hero_content" label="Presentació (separa els paràgrafs amb una línia en blanc)" :value="old('hero_content', $home->hero_content)" :multiline="true" />
@@ -66,6 +66,12 @@
         });
         summaries.addEventListener('click', (event) => {
             if (event.target.matches('[data-remove-summary]')) event.target.closest('[data-summary]').remove();
+        });
+        summaries.addEventListener('change', (event) => {
+            if (!event.target.matches('[data-summary-icon]')) return;
+            event.target.closest('[data-summary]').querySelectorAll('[data-summary-icon-preview]').forEach(preview => {
+                preview.hidden = preview.dataset.summaryIconPreview !== event.target.value;
+            });
         });
     </script>
 </x-admin.layout>

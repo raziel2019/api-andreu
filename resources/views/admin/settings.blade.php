@@ -1,7 +1,7 @@
-<x-admin.layout title="Configuració">
-    <h1>Configuració</h1>
+<x-admin.layout save-form="cms-editor" title="Identidad y contacto">
+    <x-admin.page-heading section="Identidad y contacto" title="Identidad y contacto" subtitle="Los datos del estudio y el contenido compartido de la web." />
     <p>Deixa en blanc les dades de contacte que el client encara no ha confirmat.</p>
-    <form method="POST" action="{{ route('admin.settings.update') }}" enctype="multipart/form-data">
+    <form id="cms-editor" method="POST" action="{{ route('admin.settings.update') }}" enctype="multipart/form-data">
         @csrf @method('PUT')
         <fieldset><legend>Dades de contacte</legend>
             <x-admin.field name="contact_email" label="Correu de contacte" type="email" :value="$settings->contact_email" />
@@ -19,6 +19,10 @@
             <x-admin.field name="professional_registration" label="Dades professionals / registre (si escau)" :value="$settings->professional_registration" />
             <x-admin.field name="data_controller_name" label="Responsable del tractament (si és diferent)" :value="$settings->data_controller_name" />
         </fieldset>
+        <h2>Icones compartides del web</h2>
+        @foreach(\App\Services\InterfaceMediaSlots::LABELS as $key => $label)
+            <x-admin.media-picker :name="'interface_'.$key" :label="$label" :path="$settings->interface_media[$key] ?? null" />
+        @endforeach
         <x-admin.image-field name="logo" label="Logotip" :path="$settings->logo_path" />
         <h2>Crida de contacte compartida</h2>
         <p>Aquest contingut és compartit entre les pàgines. La crida pròpia de l’inici s’edita a Inicio.</p>

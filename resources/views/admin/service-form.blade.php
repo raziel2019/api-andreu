@@ -1,7 +1,7 @@
-<x-admin.layout :title="$service->exists ? 'Edita el servei' : 'Nou servei'">
+<x-admin.layout save-form="cms-editor" :title="$service->exists ? 'Edita el servei' : 'Nou servei'">
     <h1>{{ $service->exists ? 'Edita el servei' : 'Nou servei' }}</h1>
     <p><a href="{{ route('admin.services.index') }}">Torna als serveis</a></p>
-    <form method="POST" action="{{ $service->exists ? route('admin.services.update', $service) : route('admin.services.store') }}" enctype="multipart/form-data">
+    <form id="cms-editor" method="POST" action="{{ $service->exists ? route('admin.services.update', $service) : route('admin.services.store') }}" enctype="multipart/form-data">
         @csrf @if($service->exists) @method('PUT') @endif
         <x-admin.translated-field name="title" label="Títol" :value="$service->title" />
         <x-admin.translated-field name="subtitle" label="Subtítol" :value="$service->subtitle" :required="false" />

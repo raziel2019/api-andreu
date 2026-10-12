@@ -25,7 +25,7 @@ Three new migrations create the domain tables and add `users.is_admin`; existing
 | `User` / `users` | Existing account, hashed password, new admin authorization flag |
 | `SiteSetting` / `site_settings` | Contact email, phone, translated location, social URLs, logo storage reference, shared callout/footer copy and destinations |
 | `HomePage` / `home_pages` | Translated hero paragraphs, eyebrow, image description/caption, hero CTA, summaries headings, portfolio teaser, CTA copy and destinations; has many summaries |
-| `HomeServiceSummary` / `home_service_summaries` | Stable slug, translated title/description, optional icon reference, order; belongs to Home |
+| `HomeServiceSummary` / `home_service_summaries` | Stable slug, translated title/description, nullable whitelisted `icon` identifier, existing `icon_path` reference, order; belongs to Home |
 | `AboutPage` / `about_pages` | Title, introduction, image/caption, benefits and method headings/introduction; has many benefits and steps |
 | `AboutBenefit` / `about_benefits` | Translated content and order; belongs to About |
 | `WorkingMethodStep` / `working_method_steps` | Translated content and order; belongs to About |
@@ -66,9 +66,9 @@ MariaDB stores paths only. Assets live on Laravel's existing `public` filesystem
 
 Approved current assets are bundled under `database/seeders/media` and copied to `seed/` by the content seeder when missing. They include the existing logo, Home/About/document images, three summary icons and four service icons. Trusted source SVG icons are seed assets only; uploaded SVG is rejected.
 
-Home, About, Services page, service icon and logo uploads accept JPG/JPEG, PNG and WebP, checking image contents, MIME-derived type, filename extension, 5 MB size and maximum 6000 × 6000 dimensions. Laravel generates storage filenames. Replacing/removing an image deletes an old file only when no CMS model still references it. Nginx serves `/storage/` as static files, preventing PHP execution, and sets `nosniff`. Docker PHP and Nginx upload limits allow the two-image form; rebuilding `app` applies the PHP configuration change. Existing images stay unchanged after invalid submissions.
+Home, About, Services page, service icon and logo uploads accept JPG/JPEG, PNG and WebP, checking image contents, MIME-derived type, filename extension, 5 MB size and maximum 6000 × 6000 dimensions. Laravel generates storage filenames. Replacing/removing an assignment now retains its file in the universal reusable media catalog. Nginx serves `/storage/` as static files, preventing PHP execution, and sets `nosniff`. Docker PHP and Nginx upload limits allow the two-image form; rebuilding `app` applies the PHP configuration change. Existing images stay unchanged after invalid submissions.
 
-`CmsMedia` centralizes generated-file storage and reference-aware cleanup. `SaveContent` wraps persistence and child synchronization in a transaction, cleaning up newly uploaded files on failure and checking old references after commit. Existing Home persistence reuses the same cleanup service. A general media library, transformations and unused-file maintenance remain optional future work.
+`CmsMedia` centralizes validated raster decoding/re-encoding, generated-file storage and reusable assignment handling. `SaveContent` wraps persistence and child synchronization in a transaction, cleaning up newly uploaded files on failure and checking old references after commit. Existing Home persistence reuses the same cleanup service. A slot-based media library now reuses these services; transformations and unused-file maintenance remain optional future work.
 
 ## Public API and frontend contract
 
@@ -86,7 +86,31 @@ Content endpoints are GET/HEAD only; content writes return 405. `POST /api/v1/co
 
 Fields use snake_case. Every record includes `id`; repeatable items include `sort_order`, and services/options/summaries include their stable `slug`. Each translated field resolves to a plain string or null. Media path fields are exposed as `*_url`, not database/storage paths. For example `hero_image_path` becomes `hero_image_url`, and `icon_path` becomes `icon_url`.
 
-Home includes `hero_title`, `hero_content`, `hero_eyebrow`, `hero_image_url`, `hero_image_alt`, `hero_image_caption`, `hero_cta_label`, `hero_cta_destination`, `services_heading`, `services_introduction`, `service_summaries`, `stories_heading`, `stories_introduction`, `portfolio_title`, `portfolio_image_url`, `portfolio_image_alt`, `portfolio_cta_label`, `portfolio_cta_destination`, `cta_title`, `cta_content`, `cta_label`, `cta_destination`. Summaries have `title`, `description` and `icon_url`.
+Home includes `hero_title`, `hero_content`, `hero_eyebrow`, `hero_image_url`, `hero_image_alt`, `hero_image_caption`, `hero_cta_label`, `hero_cta_destination`, `services_heading`, `services_introduction`, `service_summaries`, `stories_heading`, `stories_introduction`, `portfolio_title`, `portfolio_image_url`, `portfolio_image_alt`, `portfolio_cta_label`, `portfolio_cta_destination`, `cta_title`, `cta_content`, `cta_label`, `cta_destination`. Summaries have `id`, `title`, `description`, `icon`, `icon_url`, `sort_order` and `slug`.
+
+### Editable Home summary icons
+
+Each summary card at `/admin/home` contains a current preview and icon select alongside CA/ES title/description and existing order controls. The same CSRF-protected `PUT /admin/home` saves `service_summaries[index][icon]`. Supported identifiers are exactly `archive`, `search`, `scan`, `book-open`; identifiers never translate. Unknown values, SVG/HTML/JavaScript strings and client-supplied `icon_path` fields are rejected before any Home content changes. Omitted icons preserve the stored selection for older clients; a blank/null selection preserves the existing image path without a predefined identifier. New form cards default to `archive`.
+
+Selections reuse trusted, repository-owned approved SVG assets on the existing `public` disk. They update `icon_path`, so consumers that already display `icon_url` can reflect icon changes without changing Vue source. Previews use the same bundled artwork as image data URLs, remaining available even when unused public files have been cleaned up. Missing selected public assets are copied from the bundle during save. The existing media library still accepts validated raster replacements; replacing a summary image clears its identifier to null and exposes the uploaded image through `icon_url`. No administrator-supplied SVG or HTML is stored or rendered.
+
+Both `GET /api/v1/pages/home?locale=ca` and `?locale=es` return the existing `{ "data": { ... } }` wrapper. The exact summary item shape is:
+
+```json
+{
+  "id": 1,
+  "title": "Organització i quadres de classificació d'arxius",
+  "description": "Cada document, al seu lloc.",
+  "icon": "archive",
+  "icon_url": "https://backend.example/storage/seed/summary-organization.svg",
+  "sort_order": 0,
+  "slug": "organization"
+}
+```
+
+The item is located at `data.service_summaries[index]`; remaining Home fields are unchanged. `id` and `sort_order` are integers, `slug` is a string, localized `title`/`description` are strings or null under existing fallback rules, `icon` is one supported string or null for legacy/custom images, and `icon_url` is the public disk URL or null when there is no image. The backend origin follows filesystem configuration. Spanish changes only translated content; identifiers, URLs, IDs, slugs and order remain the same. Render `icon_url` as an image, or map supported identifiers to matching frontend icons; never render API content as raw HTML/SVG. Summaries remain sorted by `sort_order`, then `id`. Home visibility continues to use existing page activation behavior.
+
+Run `php artisan migrate --no-interaction` to apply `2026_10_12_080514_add_icon_to_home_service_summaries_table.php`. It adds nullable `icon` and backfills only recognized approved asset paths, preserving custom paths, summaries, translations, order and visibility. Rollback drops the identifier but retains content and image paths. No reseeding is required for existing installations. Fresh seeding supplies organization → archive, digitization → scan, research → search, advice → book-open; advice reuses the approved bilingual Services content. Existing Home collections are never expanded or reset on reseeding, including administrator-deleted summaries and changed icons.
 
 About children expose localized `content`. Services expose `title`, nullable `subtitle`, `description`, `icon_url`, `active`, `features`. Contact options expose `slug`, `label`, `active`. Portfolio's `linkedin_destination` is null until confirmed; `cta_destination` supports the current internal Home link.
 
@@ -98,7 +122,7 @@ CORS applies only to `/api/v1/*`, allows GET/HEAD/POST/OPTIONS, exposes `Content
 
 `ApprovedContentSeeder` reads the repository-owned snapshot `database/seeders/content/approved-content.json`, copied from the current Vue `src/locales/ca.ts` and `es.ts`. The Catalan About/Services text matches `Frontend/docs/client-revision-01.md`; Spanish is the current complete translation. No obsolete design copy is used. Seed image mappings follow current Vue components, not old Figma manifests.
 
-Fresh seeding provides Home (including three summaries), About (three benefits and three steps), four Services (twelve features plus Services page editorial content), construction-only Portfolio, Contact (six approved options), and site settings. Contact location is the existing approved location. Email, phone, LinkedIn and Instagram remain null. Reseeding preserves existing page/editor changes and existing service values, and does not reset an existing administrator password. Child collections seed when their parent is first created; the seeder is not a content synchronization command.
+Fresh seeding provides Home (including four summaries), About (three benefits and three steps), four Services (twelve features plus Services page editorial content), construction-only Portfolio, Contact (six approved options), and site settings. Contact location is the existing approved location. Email, phone, LinkedIn and Instagram remain null. Reseeding preserves existing page/editor changes and existing service values, and does not reset an existing administrator password. Child collections seed when their parent is first created; the seeder is not a content synchronization command.
 
 ## Environment and Docker verification
 
@@ -120,7 +144,7 @@ docker compose exec -T app vendor/bin/pint --format agent
 
 ## Remaining work and execution status
 
-All current editorial CMS sections are editable after Phase 2. Optional future work includes a media library/transformations, production administrator provisioning or password recovery, and separate Vue API integration. Portfolio project details, SEO and Blog were not implemented. Nothing was deployed and the Vue repository was not modified.
+All current editorial CMS sections are editable after Phase 2. Optional future work includes media transformations, production administrator provisioning or password recovery, and separate Vue API integration. Portfolio project details, SEO and Blog were not implemented. Nothing was deployed and the Vue repository was not modified.
 
 Final Phase 2 Docker verification: MariaDB `migrate:fresh --seed` passed; PHPUnit passed **201 tests / 754 assertions** (92 added beyond Phase 1); full-project Pint, Composer validation, route listing and Nginx validation passed. Live Nginx requests returned HTTP 200 for admin login and all six public endpoints. Authenticated editor flows are verified by HTTP feature tests, not an interactive browser session. Tests use isolated SQLite in memory; the migration/seed command exercised the actual MariaDB service. No Git metadata is present, so full-project Pint was used rather than `--dirty`.
 
@@ -141,3 +165,36 @@ The endpoint limits every attempt to five per minute per IP. Missing configurati
 `/admin/pages/visibility` provides session-authenticated, Gate-authorized controls for Home, About, Services, Portfolio, Contact, Legal Notice, Privacy and Cookies. A new migration adds default-true boolean `active` to the five singleton page models; LegalPage reuses its existing field. Hidden pages remain editable and retain all editorial content, child records and media. Legal publication validation is preserved.
 
 Public page endpoints return 404 when hidden, including the complete Services response. Home never redirects. `/api/v1/site` adds `data.pages`, an eight-key boolean map (`home`, `about`, `services`, `portfolio`, `contact`, `legal_notice`, `privacy`, `cookies`) for public navigation/footer integration. Missing records report false. Reseeding preserves visibility choices; legal seeds remain inactive drafts. See [page visibility](page-visibility.md) for the contract, rollout and frontend expectations. Vue is unchanged.
+
+
+## CMS Figma visual redesign
+
+Figma file `2cmVwrdFK1lFFFOQhF2pdr`, nodes `12:2`, `12:363`, `12:724` and `12:969`, now define the shared admin visual system. Existing `components/admin/layout` composes a persistent 288 px desktop sidebar, 85 px header, bronze/warm tokens and self-hosted Fraunces/Poppins. New sidebar, topbar, heading, status, statistics, card, save, page-list and action components reuse existing translated fields and editor functionality. Public CSS/JS assets keep admin rendering independent of Vite; no UI library is added. Mobile navigation uses an accessible drawer, and forms/cards stack at small widths.
+
+Five primary navigation entries are Vista general, Contenidos y traducciones, Biblioteca de imágenes, Apariencia and Identidad y contacto. `/admin/content` links to all original page/legal editors and visibility controls. Dashboard counts the actual page map, visible pages and two supported languages, with a database service count. It embeds the configured public frontend as a read-only preview. All public-site links use the existing FRONTEND_URL through `app.frontend_url`.
+
+`/admin/media` lists Home hero/portfolio, About, Services page, logo and current service/summary icon slots. `PUT /admin/media/{slot}` uses CMS Form Request validation and server-owned model/column mappings, then delegates to SaveContent/CmsMedia for transactional replacement and shared-reference-safe cleanup. Storage remains the existing public disk, generated cms paths and `/storage/` URLs. The universal media follow-up adds a unique disk/path MediaAsset catalog while preserving existing content path columns; no arbitrary URL editor or duplicate content state is introduced.
+
+`/admin/appearance` now edits persisted `SiteSetting.primary_color` and `background_color` through an admin-only PUT action, strict six-digit hex validation, uppercase normalization and existing SaveContent. An additive migration supplies #8F6C35/#FFFFFF defaults to existing rows. Color pickers, hex inputs, scoped live preview and individually confirmed resets share the actual save form. SiteSettingResource adds `data.theme` from saved columns; the API query is uncached, so the next request observes saved values. Vue retains static tokens until its separate integration phase. Identity/contact remains the existing `/admin/settings` form, including original contact/legal fields and translated callout/footer copy. The global header save targets the screen's actual primary form, or is disabled when no single form exists; media saves per slot.
+
+CA/ES remain the only editorial languages, with Catalan canonical. Blog, English, browser-only/local persistence and fake backup actions are omitted. Export/import/restore remain clearly unavailable. Authentication, CSRF, admin authorization, validation, legal publication, page visibility and API 404 contracts are retained. Vue is unchanged.
+
+See [admin-figma-redesign.md](admin-figma-redesign.md) for node mapping, component/route inventory, storage behavior, intentional adaptations and visual/test results. Current Docker suite: 354 passed / 1571 assertions, including theme and secure provisioning coverage; the former production-admin-seeder failure is resolved. Pint, Composer validation and route inspection passed.
+
+
+## Persistent theme and explicit administrator provisioning
+
+Migration `2026_10_11_111753_add_theme_colors_to_site_settings_table.php` adds non-null seven-character `primary_color` and `background_color`, defaulting to #8F6C35 and #FFFFFF without resetting existing content. Reseeding continues using firstOrCreate and preserves theme choices. `GET /api/v1/site` adds `data.theme = { primary_color, background_color }` while retaining every previous field and the eight-key page map. Colors are global across CA/ES; no locale or content model was added.
+
+AppearanceController and UpdateAppearanceRequest replace the former reference-only screen. Both values are required and validated as six-digit #RRGGBB, then saved uppercase; malformed input preserves old values. Only validated colors are accepted, with auth/admin Gate, session and CSRF unchanged. The live preview uses only validated colors in scoped CSS properties, and reset only prepares a value until Save is submitted. `public/admin-theme.css` and `.js` are admin-only assets.
+
+AdminUserSeeder is restricted to local/testing. Production `db:seed`, including --force and configured development credentials, cannot create/promote administrators. `cms:provision-admin {email}` supplies an explicit trusted-console path with hidden password and confirmation, existing hashed cast, idempotence for existing administrators, refusal to alter non-admin accounts and refusal to create accounts non-interactively. The previous production-seeder test also initializes its lazy isolated test schema before switching environment. No real administrator was provisioned during verification.
+
+See [theme-settings.md](theme-settings.md) for the exact public payload, migration behavior, security boundary, secure operator command, actual local HTTP response and future Vue token integration instructions. No Vue or public frontend assets were modified, and nothing was deployed.
+
+
+## Universal media management
+
+See [Universal CMS media library](universal-media-library.md) for the exact audited slot inventory, migrations, picker/save contracts, SVG limitation, API additions, Docker/Plesk storage strategy and actual restart verification. `/admin/media` now browses paginated assets, uploads unassigned files and assigns existing assets; `POST /admin/media` remains admin-only. All existing image-field components delegate to one media picker. Home summaries retain their four presets and also accept custom media. Service features have an additive nullable icon path; Settings has eleven audited shared interface-icon assignments. New public fields are `data.interface_media` on `/api/v1/site` and `features[*].icon_url` on Services. Those static frontend slots await Vue integration; existing media URL consumers remain compatible.
+
+Media assets store metadata only. Selection submits an asset ID and resolves its immutable public path on the server, preserving the existing path-based assignment schema. Unlinking/replacing/deleting content retains library files. Only new uploads from a failed save are discarded. PNG/JPEG/WebP uploads are decoded and re-encoded; arbitrary SVG and AVIF are rejected. Repository-trusted seed SVG assets remain usable. Catalog import and seeding are idempotent and preserve custom assignments. Local additive migrations and an actual app-container restart were verified; nothing was deployed and Vue was not modified.

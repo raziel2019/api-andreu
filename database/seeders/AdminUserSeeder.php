@@ -10,6 +10,10 @@ class AdminUserSeeder extends Seeder
 {
     public function run(): void
     {
+        if (! app()->environment(['local', 'testing'])) {
+            return;
+        }
+
         $email = config('cms.admin_email');
         $password = config('cms.admin_password');
 

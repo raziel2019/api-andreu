@@ -1,0 +1,1 @@
+<div class="system-banner"><x-admin.icon name="status" /><p><strong>CMS conectado.</strong> Los cambios se guardan en el CMS al pulsar Guardar y se publican en las páginas visibles de la web.</p></div>

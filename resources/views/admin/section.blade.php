@@ -3,7 +3,7 @@
     <p class="notice">Consulta del contingut actual. L’edició d’aquesta secció està pendent.</p>
     @foreach($records as $record)
         <section class="panel">
-            <table>
+            <div class="table-scroll"><table>
                 <thead><tr><th>Camp</th><th>Català</th><th>Castellano</th></tr></thead>
                 <tbody>
                     @foreach($record->getAttributes() as $field => $raw)
@@ -21,7 +21,7 @@
                         @endforeach
                     @endforeach
                 </tbody>
-            </table>
+            </table></div>
         </section>
     @endforeach
 </x-admin.layout>

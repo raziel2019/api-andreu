@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class SaveContent
@@ -28,6 +27,17 @@ class SaveContent
                     $newPaths[$column] = $this->media->store($data[$input], $input);
                 }
             }
+            foreach ($collections as $input => $method) {
+                foreach ($data[$input] as $index => &$item) {
+                    if (($item['icon'] ?? null) instanceof UploadedFile) {
+                        $path = $this->media->store($item['icon'], $input.'.'.$index.'.icon');
+                        $newPaths[$input.'.'.$index] = $path;
+                        $item['icon_path'] = $path;
+                        unset($item['icon']);
+                    }
+                }
+                unset($item);
+            }
             $record = DB::transaction(function () use ($record, $data, $images, $collections, $newPaths, &$oldPaths): Model {
                 if ($record->exists) {
                     $record = $record->newQuery()->lockForUpdate()->findOrFail($record->getKey());
@@ -35,12 +45,13 @@ class SaveContent
                 $excluded = [...array_keys($images), ...array_keys($collections)];
                 foreach ($images as $input => $column) {
                     $excluded[] = 'remove_'.$input;
+                    $excluded[] = $input.'_asset_id';
                 }
                 $attributes = Arr::except($data, $excluded);
                 foreach ($images as $input => $column) {
-                    if (isset($newPaths[$column]) || ($data['remove_'.$input] ?? false)) {
+                    if (isset($newPaths[$column]) || ($data['remove_'.$input] ?? false) || ($data[$input.'_asset_id'] ?? null)) {
                         $oldPaths[] = $record->getAttribute($column);
-                        $attributes[$column] = $newPaths[$column] ?? null;
+                        $attributes[$column] = $newPaths[$column] ?? $this->media->assignment(Arr::except($data, [$input]), $input, $record->getAttribute($column));
                     }
                 }
                 $record->fill($attributes)->save();
@@ -51,11 +62,13 @@ class SaveContent
                 return $record;
             });
         } catch (Throwable $exception) {
-            Storage::disk('public')->delete(array_values($newPaths));
+            if ($newPaths !== []) {
+                $this->media->discard(array_values($newPaths));
+            }
             throw $exception;
         }
         foreach (array_unique(array_filter($oldPaths)) as $path) {
-            $this->media->deleteIfUnused($path);
+            $this->media->retain($path);
         }
 
         return $record;
@@ -72,7 +85,7 @@ class SaveContent
             return $paths;
         });
         foreach ($paths as $path) {
-            $this->media->deleteIfUnused($path);
+            $this->media->retain($path);
         }
     }
 }

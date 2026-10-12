@@ -70,7 +70,7 @@ class CmsMediaTest extends TestCase
         $this->assertCount(1, Storage::disk('public')->files('cms'));
     }
 
-    public function test_unreferenced_service_media_is_deleted_after_confirmed_service_deletion(): void
+    public function test_library_media_is_retained_after_confirmed_service_deletion(): void
     {
         $admin = $this->cmsAdmin();
         $service = Service::findOrFail(1);
@@ -80,7 +80,7 @@ class CmsMediaTest extends TestCase
 
         $this->delete('/admin/services/1', ['confirm_delete' => 1])->assertRedirect('/admin/services');
 
-        Storage::disk('public')->assertMissing($path);
+        Storage::disk('public')->assertExists($path);
     }
 
     public function test_failed_content_transaction_rolls_back_and_removes_new_upload(): void

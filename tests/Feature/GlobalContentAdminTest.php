@@ -22,7 +22,7 @@ class GlobalContentAdminTest extends TestCase
         $this->actingAs($admin)->put('/admin/settings', $payload)->assertRedirect('/admin/settings')->assertSessionHas('status');
 
         $this->assertSame(['ca' => 'Nou peu de pàgina', 'es' => 'Nuevo pie de página'], $settings->fresh()->footer_description);
-        Storage::disk('public')->assertMissing('seed/logo.svg');
+        Storage::disk('public')->assertExists('seed/logo.svg');
         Storage::disk('public')->assertExists($settings->fresh()->logo_path);
         $this->getJson('/api/v1/site?locale=es')->assertJsonPath('data.footer_description', 'Nuevo pie de página')->assertJsonPath('data.callout_title', 'Hablemos hoy')->assertJsonPath('data.contact_email', null);
     }

@@ -15,6 +15,7 @@ class HomeServiceSummaryFactory extends Factory
             'title' => ['ca' => 'Text de prova', 'es' => 'Texto de prueba'],
             'description' => ['ca' => 'Text de prova', 'es' => 'Texto de prueba'],
             'icon_path' => null,
+            'icon' => 'archive',
             'sort_order' => 0,
             'slug' => fake()->unique()->slug(),
             'home_page_id' => HomePage::factory(),

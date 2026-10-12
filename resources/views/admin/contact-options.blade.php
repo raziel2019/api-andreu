@@ -5,7 +5,7 @@
         @csrf @method('PUT')
         <div class="panel">
             <p>Un número més petit apareix abans. Una opció no visible no apareix al formulari públic.</p>
-            <table><thead><tr><th>Català</th><th>Castellano</th><th>Estat</th><th>Ordre</th><th>Acció</th></tr></thead><tbody>
+            <div class="table-scroll"><table><thead><tr><th>Català</th><th>Castellano</th><th>Estat</th><th>Ordre</th><th>Acció</th></tr></thead><tbody>
                 @forelse($options as $index => $option)
                     <tr>
                         <td>{{ $option->translated('label', 'ca') }}</td><td lang="es">{{ $option->translated('label', 'es') }}</td>
@@ -14,7 +14,7 @@
                         <td><a href="{{ route('admin.contact.options.edit', $option) }}">Edita</a></td>
                     </tr>
                 @empty<tr><td colspan="5">Encara no hi ha opcions. Afegeix-ne una.</td></tr>@endforelse
-            </tbody></table>
+            </tbody></table></div>
             <x-admin.error name="items" />
             @if($options->isNotEmpty())<p><button type="submit">Desa l’ordre de les opcions</button></p>@endif
         </div>

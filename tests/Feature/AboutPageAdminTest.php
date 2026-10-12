@@ -78,7 +78,7 @@ class AboutPageAdminTest extends TestCase
 
         $this->actingAs($admin)->put('/admin/about', $payload)->assertRedirect('/admin/about');
 
-        Storage::disk('public')->assertMissing('seed/about.png');
+        Storage::disk('public')->assertExists('seed/about.png');
         Storage::disk('public')->assertExists(AboutPage::findOrFail(1)->image_path);
     }
 

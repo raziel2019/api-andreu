@@ -2,10 +2,11 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Services\HomeSummaryIcons;
 use Closure;
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class UpdateHomePageRequest extends FormRequest
+class UpdateHomePageRequest extends CmsFormRequest
 {
     public function authorize(): bool
     {
@@ -73,12 +74,16 @@ class UpdateHomePageRequest extends FormRequest
             'hero_cta_destination' => ['required', 'string', 'max:2048', $this->destinationRule()],
             'portfolio_cta_destination' => ['required', 'string', 'max:2048', $this->destinationRule()],
             'cta_destination' => ['required', 'string', 'max:2048', $this->destinationRule()],
-            'hero_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'extensions:jpg,jpeg,png,webp', 'max:5120', 'dimensions:max_width=6000,max_height=6000'],
-            'portfolio_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'extensions:jpg,jpeg,png,webp', 'max:5120', 'dimensions:max_width=6000,max_height=6000'],
+            ...$this->imageRules('hero_image'),
+            ...$this->imageRules('portfolio_image'),
             'remove_hero_image' => ['sometimes', 'boolean'],
             'remove_portfolio_image' => ['sometimes', 'boolean'],
             'service_summaries' => ['present', 'array', 'max:12'],
-            'service_summaries.*' => ['array:slug,title,description,sort_order'],
+            'service_summaries.*' => ['array:slug,title,description,sort_order,icon,custom_icon,custom_icon_asset_id,remove_custom_icon'],
+            'service_summaries.*.icon' => ['sometimes', 'nullable', 'string', Rule::in(array_keys(HomeSummaryIcons::OPTIONS))],
+            'service_summaries.*.custom_icon' => $this->imageRules('custom_icon')['custom_icon'],
+            'service_summaries.*.custom_icon_asset_id' => ['nullable', 'integer', Rule::exists('media_assets', 'id')->where('disk', 'public')],
+            'service_summaries.*.remove_custom_icon' => ['sometimes', 'boolean'],
             'service_summaries.*.slug' => ['required', 'string', 'regex:/^[a-z0-9-]+$/', 'max:100', 'distinct'],
             'service_summaries.*.title' => ['required', 'array:ca,es'],
             'service_summaries.*.title.ca' => ['required', 'string', 'max:500'],

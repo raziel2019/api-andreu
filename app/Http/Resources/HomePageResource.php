@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources;
 
+use App\Services\CmsMedia;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 class HomePageResource extends JsonResource
 {
@@ -28,9 +28,9 @@ class HomePageResource extends JsonResource
             'cta_title' => $this->resource->translated('cta_title', app()->getLocale()),
             'cta_content' => $this->resource->translated('cta_content', app()->getLocale()),
             'cta_label' => $this->resource->translated('cta_label', app()->getLocale()),
-            'hero_image_url' => $this->hero_image_path ? Storage::disk('public')->url($this->hero_image_path) : null,
+            'hero_image_url' => CmsMedia::publicUrl($this->hero_image_path),
             'hero_cta_destination' => $this->hero_cta_destination,
-            'portfolio_image_url' => $this->portfolio_image_path ? Storage::disk('public')->url($this->portfolio_image_path) : null,
+            'portfolio_image_url' => CmsMedia::publicUrl($this->portfolio_image_path),
             'portfolio_cta_destination' => $this->portfolio_cta_destination,
             'cta_destination' => $this->cta_destination,
             'service_summaries' => HomeServiceSummaryResource::collection($this->whenLoaded('serviceSummaries')),

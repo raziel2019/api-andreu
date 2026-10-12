@@ -31,6 +31,7 @@ abstract class CmsFormRequest extends FormRequest
         return [
             $field => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'extensions:jpg,jpeg,png,webp', 'max:5120', 'dimensions:max_width=6000,max_height=6000'],
             'remove_'.$field => ['sometimes', 'boolean'],
+            $field.'_asset_id' => ['nullable', 'integer', Rule::exists('media_assets', 'id')->where('disk', 'public')],
         ];
     }
 

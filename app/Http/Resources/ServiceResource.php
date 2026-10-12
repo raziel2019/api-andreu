@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources;
 
+use App\Services\CmsMedia;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 class ServiceResource extends JsonResource
 {
@@ -15,7 +15,7 @@ class ServiceResource extends JsonResource
             'title' => $this->resource->translated('title', app()->getLocale()),
             'subtitle' => $this->resource->translated('subtitle', app()->getLocale()),
             'description' => $this->resource->translated('description', app()->getLocale()),
-            'icon_url' => $this->icon_path ? Storage::disk('public')->url($this->icon_path) : null,
+            'icon_url' => CmsMedia::publicUrl($this->icon_path),
             'sort_order' => $this->sort_order,
             'active' => $this->active,
             'slug' => $this->slug,

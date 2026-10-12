@@ -2,9 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\Services\CmsMedia;
+use App\Services\InterfaceMediaSlots;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 class SiteSettingResource extends JsonResource
 {
@@ -13,6 +14,10 @@ class SiteSettingResource extends JsonResource
         return [
             'id' => $this->id,
             'pages' => $this->pages,
+            'theme' => [
+                'primary_color' => $this->primary_color,
+                'background_color' => $this->background_color,
+            ],
             'location' => $this->resource->translated('location', app()->getLocale()),
             'callout_title' => $this->resource->translated('callout_title', app()->getLocale()),
             'callout_content' => $this->resource->translated('callout_content', app()->getLocale()),
@@ -24,7 +29,8 @@ class SiteSettingResource extends JsonResource
             'phone' => $this->phone,
             'linkedin_url' => $this->linkedin_url,
             'instagram_url' => $this->instagram_url,
-            'logo_url' => $this->logo_path ? Storage::disk('public')->url($this->logo_path) : null,
+            'interface_media' => array_map(fn (?string $path): ?string => CmsMedia::publicUrl($path), array_replace(array_fill_keys(array_keys(InterfaceMediaSlots::LABELS), null), $this->interface_media ?? [])),
+            'logo_url' => CmsMedia::publicUrl($this->logo_path),
             'callout_destination' => $this->callout_destination,
             'footer_cta_destination' => $this->footer_cta_destination,
         ];

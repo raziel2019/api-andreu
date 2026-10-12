@@ -33,6 +33,23 @@ class ContentSeedingTest extends TestCase
         Storage::disk('public')->assertExists(['seed/home-hero.png', 'seed/about.png', 'seed/documents.png', 'seed/logo.svg']);
     }
 
+    public function test_home_summary_icons_are_seeded_and_reseeding_preserves_choices_and_removed_summaries(): void
+    {
+        Storage::fake('public');
+        $this->seed(ApprovedContentSeeder::class);
+        $home = HomePage::with('serviceSummaries')->findOrFail(1);
+        $this->assertSame(['organization' => 'archive', 'digitization' => 'scan', 'research' => 'search', 'advice' => 'book-open'], $home->serviceSummaries->pluck('icon', 'slug')->all());
+        $home->serviceSummaries[0]->update(['icon' => 'search', 'icon_path' => 'seed/summary-research.svg', 'sort_order' => 9, 'title' => ['ca' => 'Arxius', 'es' => 'Archivos']]);
+        $home->serviceSummaries[3]->delete();
+        $before = $home->fresh('serviceSummaries')->serviceSummaries->toArray();
+
+        $this->seed(ApprovedContentSeeder::class);
+        $this->seed(ApprovedContentSeeder::class);
+
+        $this->assertSame($before, $home->fresh('serviceSummaries')->serviceSummaries->toArray());
+        $this->assertDatabaseCount('home_service_summaries', 3);
+    }
+
     public function test_environment_admin_is_seeded_with_a_hashed_password_and_no_password_reset_on_reseed(): void
     {
         config(['cms.admin_email' => 'admin@example.test', 'cms.admin_password' => 'local-password-123']);
@@ -60,6 +77,7 @@ class ContentSeedingTest extends TestCase
     public function test_development_admin_seeding_is_disabled_in_production(): void
     {
         config(['cms.admin_email' => 'admin@example.test', 'cms.admin_password' => 'local-password-123']);
+        User::query()->count();
         $this->app['env'] = 'production';
 
         $this->artisan('db:seed', ['--class' => AdminUserSeeder::class, '--force' => true])->assertExitCode(0);
