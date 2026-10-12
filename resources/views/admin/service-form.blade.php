@@ -5,7 +5,7 @@
         @csrf @if($service->exists) @method('PUT') @endif
         <x-admin.translated-field name="title" label="Títol" :value="$service->title" />
         <x-admin.translated-field name="subtitle" label="Subtítol" :value="$service->subtitle" :required="false" />
-        <x-admin.translated-field name="description" label="Descripció" :value="$service->description" :multiline="true" />
+        <x-admin.translated-field name="description" label="Descripció" :value="$service->description" :multiline="true" :rich="true" />
         <x-admin.image-field name="icon" label="Icona o imatge del servei" :path="$service->icon_path" />
         <p><small>La icona és decorativa; el títol identifica el servei.</small></p>
         <x-admin.active-field :value="$service->active" />

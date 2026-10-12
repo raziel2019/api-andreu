@@ -87,7 +87,15 @@
     "portfolio": {
       "construction": "En construcció",
       "title": "Portafoli",
-      "body": "Estic donant els últims retocs a aquesta pàgina. Dona un cop d'ull a la resta del meu web mentre acabo d'enllestir-la! Mentrestant, pots mirar el meu perfil professional a LinkedIn."
+      "body": "Estic donant els últims retocs a aquesta pàgina. Dona un cop d'ull a la resta del meu web mentre acabo d'enllestir-la! Mentrestant, pots mirar el meu perfil professional a LinkedIn.",
+      "listingTitle": "Projectes",
+      "eyebrow": "Arxius · Recerca · Memòria",
+      "introduction": "Històries que mereixen ser conservades. Una mirada a la manera d’ordenar, descobrir i compartir el nostre patrimoni documental.",
+      "calloutTitle": "Parlem del teu projecte",
+      "calloutContent": "Un arxiu per ordenar, una història per descobrir. Comencem amb una conversa.",
+      "whatsappLabel": "Contactar per WhatsApp",
+      "relatedTitle": "Altres projectes",
+      "relatedEyebrow": "Continua descobrint"
     },
     "contact": {
       "description": "Explica’m què tens entre mans: un fons per organitzar, una història per investigar o documents que vols conservar. T’ajudaré a trobar el millor punt de partida.",
@@ -260,7 +268,15 @@
     "portfolio": {
       "construction": "En construcción",
       "title": "Portafolio",
-      "body": "Estoy dando los últimos retoques a esta página. ¡Echa un vistazo al resto de mi web mientras termino de prepararla! Mientras tanto, puedes consultar mi perfil profesional en LinkedIn."
+      "body": "Estoy dando los últimos retoques a esta página. ¡Echa un vistazo al resto de mi web mientras termino de prepararla! Mientras tanto, puedes consultar mi perfil profesional en LinkedIn.",
+      "listingTitle": "Proyectos",
+      "eyebrow": "Archivos · Investigación · Memoria",
+      "introduction": "Historias que merecen ser conservadas. Una mirada a la manera de ordenar, descubrir y compartir nuestro patrimonio documental.",
+      "calloutTitle": "Hablemos de tu proyecto",
+      "calloutContent": "Un archivo por ordenar, una historia por descubrir. Empecemos con una conversación.",
+      "whatsappLabel": "Contactar por WhatsApp",
+      "relatedTitle": "Otros proyectos",
+      "relatedEyebrow": "Sigue descubriendo"
     },
     "contact": {
       "description": "Cuéntame qué tienes entre manos: un fondo que organizar, una historia que investigar o documentos que quieres conservar. Te ayudaré a encontrar el mejor punto de partida.",

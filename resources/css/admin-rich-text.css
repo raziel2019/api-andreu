@@ -1,0 +1,19 @@
+.rich-text { min-width: 0; border: 1px solid var(--border, #ccc); border-radius: 8px; background: #fff; overflow: hidden; }
+.rich-text [hidden] { display: none !important; }
+.rich-toolbar { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px; border-bottom: 1px solid #ddd; }
+.rich-toolbar button { padding: 7px 9px; min-height: 36px; font-size: .85rem; border: 1px solid #ddd; border-radius: 4px; background: #fff; color: #222; }
+.rich-toolbar button[aria-pressed="true"] { background: #efe6d6; border-color: #8f6c35; }
+.rich-toolbar button:disabled { opacity: .45; }
+.rich-text .tiptap { padding: 14px; min-height: 180px; overflow-wrap: anywhere; outline-offset: -3px; }
+.rich-text .tiptap > :first-child { margin-top: 0; }
+.rich-text .tiptap p { margin: 0 0 1em; }
+.rich-text .tiptap ul { list-style: disc; padding-left: 1.5rem; }
+.rich-text .tiptap ol { list-style: decimal; padding-left: 1.5rem; }
+.rich-text .tiptap blockquote { border-left: 3px solid #8f6c35; margin: 1em 0; padding-left: 1em; }
+.rich-text .tiptap a { color: #76551e; text-decoration: underline; }
+.rich-text textarea { min-height: 220px; border: 0; border-radius: 0; font-family: monospace; }
+.rich-help, .rich-text [data-rich-status] { margin: 8px 14px; font-size: .8rem; }
+.rich-text dialog { width: min(480px, 90vw); padding: 24px; border: 1px solid #aaa; border-radius: 8px; }
+.rich-text dialog::backdrop { background: #0006; }
+.rich-dialog-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+@media (max-width: 600px) { .rich-toolbar button { min-height: 44px; } .rich-text .tiptap { padding: 10px; } }

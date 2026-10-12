@@ -15,6 +15,7 @@ class ServiceResource extends JsonResource
             'title' => $this->resource->translated('title', app()->getLocale()),
             'subtitle' => $this->resource->translated('subtitle', app()->getLocale()),
             'description' => $this->resource->translated('description', app()->getLocale()),
+            'description_html' => $this->resource->translatedHtml('description', app()->getLocale()),
             'icon_url' => CmsMedia::publicUrl($this->icon_path),
             'sort_order' => $this->sort_order,
             'active' => $this->active,

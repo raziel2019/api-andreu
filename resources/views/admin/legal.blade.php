@@ -6,7 +6,7 @@
     <form id="cms-editor" method="POST" action="{{ route('admin.legal.update', $section) }}">
         @csrf @method('PUT')
         <x-admin.translated-field name="title" label="Títol" :value="$page->title" />
-        <x-admin.translated-field name="body" label="Contingut legal" :value="$page->body" :multiline="true" :required="false" />
+        <x-admin.translated-field name="body" label="Contingut legal" :value="$page->body" :multiline="true" :rich="true" :required="false" />
         <x-admin.active-field :value="$page->active" />
         <p>Per publicar, cal contingut en català i castellà i revisió legal prèvia.</p>
         <button type="submit">Desa el contingut legal</button>

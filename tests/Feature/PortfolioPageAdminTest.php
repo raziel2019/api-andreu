@@ -11,7 +11,7 @@ class PortfolioPageAdminTest extends TestCase
 {
     use LazilyRefreshDatabase;
 
-    public function test_admin_can_edit_construction_copy_and_state_without_project_crud(): void
+    public function test_admin_can_edit_construction_copy_and_state_with_project_management(): void
     {
         $admin = $this->cmsAdmin();
         $page = PortfolioPage::findOrFail(1);
@@ -23,9 +23,9 @@ class PortfolioPageAdminTest extends TestCase
         $this->assertFalse($page->fresh()->under_construction);
         $this->assertSame(['ca' => 'Tornarem aviat', 'es' => 'Volveremos pronto'], $page->fresh()->message);
         $this->getJson('/api/v1/pages/portfolio?locale=es')->assertJsonPath('data.message', 'Volveremos pronto')->assertJsonPath('data.under_construction', false)->assertJsonPath('data.cta_label', null);
-        $this->get('/admin/portfolio')->assertSee('La gestió de projectes encara no forma part del CMS.');
-        $this->get('/admin/projects')->assertNotFound();
-        $this->getJson('/api/v1/projects')->assertNotFound();
+        $this->get('/admin/portfolio')->assertSee('Gestiona projectes');
+        $this->get('/admin/portfolio/projects')->assertOk();
+        $this->getJson('/api/v1/projects')->assertOk()->assertJsonCount(0, 'data');
     }
 
     public static function invalidDestinations(): array

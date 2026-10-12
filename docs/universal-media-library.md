@@ -4,7 +4,7 @@
 
 Audit performed on 2026-10-12 against the Laravel models, migrations, controllers, Form Requests, API Resources, Blade editors, seed assets and the sibling Vue repository (`Frontend/src/components` and `Frontend/src/views`). Vue was inspected read-only. Laravel Boost 2.10.1 database-schema and search-docs were used through its installed command interface. Installed framework: Laravel 13.34.0; PHP 8.5; Imagick 3.8.1.
 
-One authenticated CMS and one public Storage disk remain the source of truth. The library supports every existing backend media field, and adds assignments for image/icon occurrences already present as static Vue assets. It does not introduce projects, galleries, Blog, English or additional editorial sections.
+One authenticated CMS and one public Storage disk remain the source of truth. The library supports every existing backend media field, and adds assignments for image/icon occurrences already present as static Vue assets. The media-library phase did not introduce projects or galleries. The existing Portfolio implementation now reuses this same catalog and picker; see [Portfolio CMS](portfolio-cms.md). No Blog or new locale is introduced.
 
 ## Exact slot inventory
 
@@ -48,9 +48,9 @@ The current Vue service view maps features to strings; integrating feature media
 
 BrandLogo has desktop `/images/0-imgIcon.svg` and mobile `/images/1-imgIcon.svg` fallbacks. These are fallback renditions of the existing logo slot, not new independent content slots; `logo_url` already overrides both. No separate mobile logo field was invented.
 
-### Slots that do not exist
+### Portfolio media and remaining absent slots
 
-Portfolio is an under-construction text/link page: no project collection, gallery, thumbnail, hero image or image upload slot exists. Its current action-link icon uses the shared arrow slot above. The Home Portfolio teaser is the existing Portfolio-related photograph. Contact has no photograph, attachment or gallery slot; its existing two decorative icons and submit icon are covered above. About benefits and working-method steps have no independent media slots. No additional photography was invented for shared callouts or the footer. Fonts and internal admin shell icons are implementation assets, not public CMS content.
+Portfolio projects now assign `featured_image_path` and ordered JSON gallery paths using the same catalog. Each cover/gallery image has independent CA/ES alt text; gallery captions are separate plain CA/ES fields. These assignments are managed in the project form, not as fixed global registry slots. No duplicate media table or gallery model is needed. The page action-link icon still uses the shared arrow slot above; the Home Portfolio teaser retains its existing photograph. Contact has no photograph, attachment or gallery slot; its existing two decorative icons and submit icon are covered above. About benefits and working-method steps have no independent media slots. No additional photography was invented for shared callouts or the footer. Fonts and internal admin shell icons are implementation assets, not public CMS content.
 
 ## Catalog and migrations
 
@@ -152,3 +152,10 @@ Feature coverage includes admin/guest/non-admin/CSRF boundaries, raster formats,
 Authenticated browser visual review requires a signed-in administrator; the available Chrome session was at the login screen. Server-rendered controls and save behavior are covered by feature tests. No administrator credentials were changed or provisioned for this task.
 
 Final checks: full `php artisan test --compact` passed with **419 tests / 2109 assertions**; `vendor/bin/pint --dirty --format agent` passed; `composer validate` reported valid; `node --check public/admin-media.js` and `git diff --check` passed. Compiled Blade views were cleared after switching the picker to the project’s existing anonymous-component convention.
+
+
+## Portfolio reuse — 2026-10-12
+
+The existing project form reuses `x-admin.media-picker` for cover and every gallery row. Uploads register reusable assets under generated paths; existing IDs resolve through `MediaCatalog`, not client paths. `SavePortfolioProject` sorts rows and uses the existing transactional `SaveContent`. Gallery entries now carry independent `alt[ca/es]` and `caption[ca/es]`; the public detail localizes them and exposes `{url, alt, caption, sort_order}`. Caption defaults to null for legacy rows and is never inferred from alt. Cover/gallery removal or project deletion keeps original files/catalog entries. No data conversion is required.
+
+Tests cover shared cover/gallery assignments, uploads, order, bilingual captions/alt, legacy fallbacks, rejected metadata and confirmed deletion retaining files. The local project create form and dynamically added caption/alt row were verified in the browser without saving sample content. See [exact API contract](portfolio-api-contract.md) and [admin workflow](portfolio-cms.md).

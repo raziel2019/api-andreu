@@ -26,5 +26,5 @@
     </div>
     <x-admin.media-picker :name="'service_summaries['.$index.'][custom_icon]'" label="Imatge o icona personalitzada" :path="$summary['icon_path'] ?? null" />
     <x-admin.translated-field :name="'service_summaries['.$index.'][title]'" label="Títol" :value="$summary['title'] ?? []" />
-    <x-admin.translated-field :name="'service_summaries['.$index.'][description]'" label="Descripció" :value="$summary['description'] ?? []" :multiline="true" />
+    <x-admin.translated-field :name="'service_summaries['.$index.'][description]'" label="Descripció" :value="$summary['description'] ?? []" :multiline="true" :rich="true" />
 </fieldset>

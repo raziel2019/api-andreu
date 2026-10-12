@@ -7,6 +7,7 @@ use App\Models\SiteSetting;
 use App\Models\User;
 use Database\Seeders\LegalPageSeeder;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
@@ -40,9 +41,9 @@ class LegalCmsTest extends TestCase
         $this->assertSame($payload['body'], $page->fresh()->body);
         $this->assertSame($type, $page->fresh()->type);
         $this->assertTrue($page->fresh()->active);
-        $this->getJson('/api/v1/legal/'.$section)->assertOk()->assertHeader('Content-Language', 'ca')->assertExactJson(['data' => ['type' => $type, 'title' => 'Títol CA', 'body' => "Text CA\n\nParàgraf"]]);
+        $this->getJson('/api/v1/legal/'.$section)->assertOk()->assertHeader('Content-Language', 'ca')->assertExactJson(['data' => ['type' => $type, 'title' => 'Títol CA', 'body' => "Text CA\n\nParàgraf", 'body_html' => '<p>Text CA</p><p>Paràgraf</p>']]);
         $this->getJson('/api/v1/legal/'.$section.'?locale=ca')->assertOk()->assertJsonPath('data.title', 'Títol CA');
-        $this->getJson('/api/v1/legal/'.$section.'?locale=es')->assertOk()->assertHeader('Content-Language', 'es')->assertExactJson(['data' => ['type' => $type, 'title' => 'Título ES', 'body' => "Texto ES\n\nPárrafo"]]);
+        $this->getJson('/api/v1/legal/'.$section.'?locale=es')->assertOk()->assertHeader('Content-Language', 'es')->assertExactJson(['data' => ['type' => $type, 'title' => 'Título ES', 'body' => "Texto ES\n\nPárrafo", 'body_html' => '<p>Texto ES</p><p>Párrafo</p>']]);
     }
 
     #[DataProvider('sections')]
@@ -85,9 +86,11 @@ class LegalCmsTest extends TestCase
         $this->getJson('/api/v1/legal/legal-notice')->assertNotFound();
     }
 
-    public function test_html_and_extra_translation_keys_are_rejected_and_stored_text_is_escaped(): void
+    public function test_unsafe_only_html_and_extra_translation_keys_are_rejected_and_legacy_input_is_escaped(): void
     {
-        $page = LegalPage::factory()->create(['body' => $this->bilingual('</textarea><script>alert(1)</script>', '<img src=x onerror=alert(1)>')]);
+        $page = LegalPage::factory()->create();
+        DB::table('legal_pages')->where('id', $page->id)->update(['body' => json_encode($this->bilingual('</textarea><script>alert(1)</script>', '<img src=x onerror=alert(1)>'))]);
+        $page->refresh();
         $this->actingAs(User::factory()->administrator()->create());
         $this->get('/admin/legal/legal-notice')->assertSee('</textarea><script>alert(1)</script>')->assertDontSee('</textarea><script>alert(1)</script>', false);
         $original = $page->body;

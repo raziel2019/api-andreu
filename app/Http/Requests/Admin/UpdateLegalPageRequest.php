@@ -20,8 +20,8 @@ class UpdateLegalPageRequest extends CmsFormRequest
             'title.ca' => ['required', 'string', 'max:255', $plainText],
             'title.es' => ['required', 'string', 'max:255', $plainText],
             'body' => ['required', 'array:ca,es'],
-            'body.ca' => ['present', Rule::requiredIf($this->boolean('active')), 'nullable', 'string', 'max:100000', $plainText],
-            'body.es' => ['present', Rule::requiredIf($this->boolean('active')), 'nullable', 'string', 'max:100000', $plainText],
+            'body.ca' => ['present', Rule::requiredIf($this->boolean('active')), 'nullable', 'string', 'max:100000'],
+            'body.es' => ['present', Rule::requiredIf($this->boolean('active')), 'nullable', 'string', 'max:100000'],
             'active' => ['required', 'boolean'],
         ];
     }

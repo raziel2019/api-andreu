@@ -6,8 +6,8 @@
         @csrf @method('PUT')
         <x-admin.translated-field name="title" :label="__('admin.fields.title')" :value="$page->title" />
         <x-admin.translated-field name="subtitle" :label="__('admin.fields.subtitle')" :value="$page->subtitle" />
-        <x-admin.translated-field name="lead" :label="__('admin.fields.lead')" :value="$page->lead" />
-        <x-admin.translated-field name="description" :label="__('admin.fields.description')" :value="$page->description" :multiline="true" />
+        <x-admin.translated-field name="lead" :label="__('admin.fields.lead')" :value="$page->lead" :rich="true" />
+        <x-admin.translated-field name="description" :label="__('admin.fields.description')" :value="$page->description" :multiline="true" :rich="true" />
         <x-admin.translated-field name="heading" :label="__('admin.fields.heading')" :value="$page->heading" />
         <x-admin.translated-field name="image_alt" :label="__('admin.fields.image_alt')" :value="$page->image_alt" />
         <x-admin.translated-field name="cta_label" :label="__('admin.fields.cta_label')" :value="$page->cta_label" />

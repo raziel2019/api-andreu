@@ -13,6 +13,7 @@ class ServiceFeatureResource extends JsonResource
         return [
             'id' => $this->id,
             'content' => $this->resource->translated('content', app()->getLocale()),
+            'content_html' => $this->resource->translatedHtml('content', app()->getLocale()),
             'sort_order' => $this->sort_order,
             'icon_url' => CmsMedia::publicUrl($this->icon_path),
         ];

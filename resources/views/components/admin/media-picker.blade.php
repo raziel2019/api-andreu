@@ -1,4 +1,4 @@
-@props(['name', 'label', 'path' => null])
+@props(['name', 'label', 'path' => null, 'assetId' => null])
 @php
     $field = str_replace(['][', '[', ']'], ['.', '.', ''], $name);
     $assetName = str_ends_with($name, ']') ? substr($name, 0, -1).'_asset_id]' : $name.'_asset_id';
@@ -14,7 +14,7 @@
     <select id="{{ $inputId }}-asset" name="{{ $assetName }}" data-media-select>
         <option value="">Conserva la selecció actual</option>
         @foreach($mediaAssets as $asset)
-            <option value="{{ $asset->id }}" data-url="{{ $asset->url() }}" @selected((string) old($assetField) === (string) $asset->id)>{{ $asset->original_filename }} · {{ $asset->width ?? '—' }} × {{ $asset->height ?? '—' }} · #{{ $asset->id }}</option>
+            <option value="{{ $asset->id }}" data-url="{{ $asset->url() }}" @selected((string) old($assetField, $assetId) === (string) $asset->id)>{{ $asset->original_filename }} · {{ $asset->width ?? '—' }} × {{ $asset->height ?? '—' }} · #{{ $asset->id }}</option>
         @endforeach
     </select>
     <x-admin.error :name="$assetField" />

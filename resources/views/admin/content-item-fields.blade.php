@@ -10,6 +10,6 @@
     @if($name === 'features')
         <x-admin.media-picker :name="$name.'['.$index.'][icon]'" label="Icona de la característica" :path="$item['icon_path'] ?? null" />
     @endif
-    <x-admin.translated-field :name="$name.'['.$index.'][content]'" label="Contingut" :value="$item['content'] ?? []" :multiline="true" />
+    <x-admin.translated-field :name="$name.'['.$index.'][content]'" label="Contingut" :value="$item['content'] ?? []" :multiline="true" :rich="true" />
     <x-admin.field :name="$name.'['.$index.'][sort_order]'" label="Ordre" type="number" :value="$item['sort_order'] ?? 0" min="0" max="10000" data-order :required="true" />
 </fieldset>

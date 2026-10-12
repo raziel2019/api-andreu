@@ -4,20 +4,20 @@
     <form id="cms-editor" method="POST" action="{{ route('admin.home.update') }}" enctype="multipart/form-data">
         @csrf @method('PUT')
         <x-admin.translated-field name="hero_title" label="Títol principal" :value="old('hero_title', $home->hero_title)" />
-        <x-admin.translated-field name="hero_content" label="Presentació (separa els paràgrafs amb una línia en blanc)" :value="old('hero_content', $home->hero_content)" :multiline="true" />
+        <x-admin.translated-field name="hero_content" label="Presentació" :value="old('hero_content', $home->hero_content)" :multiline="true" :rich="true" />
         <x-admin.translated-field name="hero_eyebrow" label="Text sobre el títol" :value="old('hero_eyebrow', $home->hero_eyebrow)" />
         <x-admin.translated-field name="hero_image_alt" label="Descripció de la imatge principal" :value="old('hero_image_alt', $home->hero_image_alt)" />
         <x-admin.translated-field name="hero_image_caption" label="Peu de la imatge principal" :value="old('hero_image_caption', $home->hero_image_caption)" />
         <x-admin.translated-field name="hero_cta_label" label="Enllaç de presentació" :value="old('hero_cta_label', $home->hero_cta_label)" />
         <x-admin.translated-field name="services_heading" label="Títol dels resums de serveis" :value="old('services_heading', $home->services_heading)" />
-        <x-admin.translated-field name="services_introduction" label="Introducció als serveis" :value="old('services_introduction', $home->services_introduction)" />
+        <x-admin.translated-field name="services_introduction" label="Introducció als serveis" :value="old('services_introduction', $home->services_introduction)" :rich="true" />
         <x-admin.translated-field name="stories_heading" label="Títol de la secció de portafoli" :value="old('stories_heading', $home->stories_heading)" />
-        <x-admin.translated-field name="stories_introduction" label="Introducció al portafoli" :value="old('stories_introduction', $home->stories_introduction)" />
+        <x-admin.translated-field name="stories_introduction" label="Introducció al portafoli" :value="old('stories_introduction', $home->stories_introduction)" :rich="true" />
         <x-admin.translated-field name="portfolio_title" label="Títol de la targeta de portafoli" :value="old('portfolio_title', $home->portfolio_title)" />
         <x-admin.translated-field name="portfolio_image_alt" label="Descripció de la imatge de portafoli" :value="old('portfolio_image_alt', $home->portfolio_image_alt)" />
         <x-admin.translated-field name="portfolio_cta_label" label="Enllaç al portafoli" :value="old('portfolio_cta_label', $home->portfolio_cta_label)" />
         <x-admin.translated-field name="cta_title" label="Títol de la crida a l’acció" :value="old('cta_title', $home->cta_title)" />
-        <x-admin.translated-field name="cta_content" label="Contingut de la crida a l’acció" :value="old('cta_content', $home->cta_content)" :multiline="true" />
+        <x-admin.translated-field name="cta_content" label="Contingut de la crida a l’acció" :value="old('cta_content', $home->cta_content)" :multiline="true" :rich="true" />
         <x-admin.translated-field name="cta_label" label="Text del botó de contacte" :value="old('cta_label', $home->cta_label)" />
         <fieldset><legend>Destinacions dels enllaços</legend>
             @foreach(['hero_cta_destination' => 'Presentació', 'portfolio_cta_destination' => 'Portafoli', 'cta_destination' => 'Contacte'] as $field => $label)

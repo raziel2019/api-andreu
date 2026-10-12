@@ -9,7 +9,8 @@ document.querySelectorAll('[data-repeatable]').forEach(section => {
             if (rows.children.length >= 50) return;
             rows.insertAdjacentHTML('beforeend', section.querySelector('[data-template]').innerHTML.replaceAll('__INDEX__', String(nextIndex++)));
             renumber();
-            rows.lastElementChild.querySelector('textarea').focus();
+            rows.lastElementChild.dispatchEvent(new CustomEvent('cms-row-added', { bubbles: true }));
+            rows.lastElementChild.querySelector('[contenteditable], textarea')?.focus();
             return;
         }
         const row = button.closest('[data-row]');

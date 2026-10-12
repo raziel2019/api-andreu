@@ -1,10 +1,10 @@
-# Portfolio CMS — Phases 1 and 2
+# Portfolio CMS architecture
 
 ## Architecture and package inventory
 
-Laravel 13.34 is the editable content source of truth for the independent Vue application. MariaDB persists content; public JSON endpoints require no session. Blade renders the session-authenticated CMS. Redis and Nginx remain the existing infrastructure. There is no Blog, registration, project-detail schema, content API write endpoint, or contact submission/email endpoint. Contact has a dedicated server-side Turnstile verification endpoint.
+Laravel 13.34 is the editable content source of truth for the independent Vue application. MariaDB persists content; public JSON endpoints require no session. Blade renders the session-authenticated CMS. Redis and Nginx remain the existing infrastructure. Portfolio projects and categories now use the existing dedicated schema and public list/detail API. There is no Blog, registration, public content write endpoint, or contact submission/email endpoint. Contact has a dedicated server-side Turnstile verification endpoint.
 
-Reused packages: Laravel's session guard, Gate authorization, Eloquent, Form Requests, API Resources and Flysystem; PHPUnit 12.5.37, Laravel Pao 1.1.5 and Pint 1.32.1 for checks. Boost 2.10.1 was installed by the user before implementation. This phase adds no Composer or npm dependency. No Livewire, Filament or auth starter kit was previously installed or added. The Vue repository was inspected for approved content and asset references, and was not modified.
+Reused packages: Laravel's session guard, Gate authorization, Eloquent, Form Requests, API Resources and Flysystem; PHPUnit 12.5.37, Laravel Pao 1.1.5 and Pint 1.32.1 for checks. Boost 2.10.1 was installed by the user before implementation. The Portfolio/WhatsApp completion adds no dependencies; the existing universal rich editor uses the locked Tiptap/DOMPurify and Symfony sanitizer packages described in `rich-text-editor.md`. No Livewire, Filament or auth starter kit was previously installed or added. The Vue repository was inspected for approved content and asset references, and was not modified.
 
 ## Authentication
 
@@ -23,7 +23,7 @@ Three new migrations create the domain tables and add `users.is_admin`; existing
 | Model / table | Content and relationships |
 | --- | --- |
 | `User` / `users` | Existing account, hashed password, new admin authorization flag |
-| `SiteSetting` / `site_settings` | Contact email, phone, translated location, social URLs, logo storage reference, shared callout/footer copy and destinations |
+| `SiteSetting` / `site_settings` | Contact email, phone, normalized WhatsApp number with derived URL, translated location, social URLs, logo storage reference, shared callout/footer copy and destinations |
 | `HomePage` / `home_pages` | Translated hero paragraphs, eyebrow, image description/caption, hero CTA, summaries headings, portfolio teaser, CTA copy and destinations; has many summaries |
 | `HomeServiceSummary` / `home_service_summaries` | Stable slug, translated title/description, nullable whitelisted `icon` identifier, existing `icon_path` reference, order; belongs to Home |
 | `AboutPage` / `about_pages` | Title, introduction, image/caption, benefits and method headings/introduction; has many benefits and steps |
@@ -32,7 +32,9 @@ Three new migrations create the domain tables and add `users.is_admin`; existing
 | `ServicePage` / `service_pages` | Current Services page heading, subtitle, lead, introduction, image and CTA; separate from repeatable services |
 | `Service` / `services` | Stable slug, translated title, nullable subtitle, description, optional icon, active flag, order; has many features |
 | `ServiceFeature` / `service_features` | Translated content and order; belongs to Service |
-| `PortfolioPage` / `portfolio_pages` | Under-construction flag, translated title/status/message/CTA, internal CTA destination and nullable LinkedIn destination; no projects |
+| `PortfolioPage` / `portfolio_pages` | Visibility/construction flags, bilingual listing/contact/related copy, rich introduction/callout/message, existing CTA/LinkedIn and compatibility WhatsApp URL |
+| `PortfolioProject` / `portfolio_projects` | Stable slug, bilingual title/rich description/body, nullable category, cover and localized alt, JSON gallery with localized alt/caption/order, year/client, draft/published status and order |
+| `PortfolioCategory` / `portfolio_categories` | Stable slug, bilingual title, order; has many projects; deletion leaves their category null |
 | `ContactPage` / `contact_pages` | Translated title, introduction, content, conversation and service legend; has many options |
 | `ContactServiceOption` / `contact_service_options` | Stable slug, translated label, active flag, order; belongs to Contact |
 
@@ -40,7 +42,7 @@ All new content tables have timestamps. Foreign keys cascade deletion of depende
 
 ## Translation and locale behavior
 
-Editorial translation columns use JSON objects with `ca` and `es` string values, cast to arrays. Catalan is canonical and is fixed as the application/default/fallback locale; environment overrides cannot introduce another editorial language. Paragraphs are plain strings separated by two newlines, preserving approved wording and hierarchy.
+Editorial translation columns use JSON objects with `ca` and `es` string values, cast to arrays. Catalan is canonical and is fixed as the application/default/fallback locale; environment overrides cannot introduce another editorial language. Legacy plain paragraphs remain compatible. Rich editorial fields use the existing universal editor/sanitizer and expose documented HTML siblings; project detail body retains its HTML contract. See `rich-text-editor.md`.
 
 Every public endpoint accepts `?locale=ca` or `?locale=es`, defaults to `ca` when omitted, and sends `Content-Language`. Unsupported, empty or array locale values return JSON 422. Missing or null Spanish translations fall back to Catalan. Nullable untranslated fields return null. API Resources select localized strings; they never expose the raw translation object. Admin fields show Català and Castellano separately. The admin interface uses Catalan, with the requested navigation labels.
 
@@ -50,10 +52,10 @@ Navigation: Inicio, Sobre mi, Serveis, Portafoli, Contacte, Configuració.
 
 - `/admin`: initial dashboard with section navigation and service count.
 - `/admin/home`: complete Home editor; translated copy, destination validation, image preview/upload/removal, and add/edit/remove/reorder service summaries. Changes immediately appear in the public Home API. `PUT /admin/home` is the save action. Summary identifiers are stable lowercase slugs; maximum twelve summaries.
-- `/admin/settings`: contact email, phone, CA/ES location, HTTP/HTTPS social URLs, logo upload/removal and translated shared callout/footer copy with destinations. Empty contact values remain allowed. `PUT /admin/settings` saves changes.
+- `/admin/settings`: normalized international WhatsApp number, contact email, phone, CA/ES location, HTTP/HTTPS social URLs, logo upload/removal and translated shared callout/footer copy with destinations. Empty contact values remain allowed. `PUT /admin/settings` saves changes.
 - `/admin/about`: full copy/image editor and add/edit/remove/reorder benefits and working-method steps.
 - `/admin/services`: service list and bulk ordering; create/edit/delete services, visibility and repeatable features. `/admin/services/page` edits the Services page introduction, image/accessibility copy and CTA.
-- `/admin/portfolio`: construction-only page copy, under-construction flag and optional CTA/LinkedIn destinations. Project management is explicitly outside scope.
+- `/admin/portfolio`: bilingual listing/contact/related copy, compatibility links and construction state. `/admin/portfolio/projects` and `/admin/portfolio/categories` manage existing project/category CRUD; project list supports transactional bulk ordering, project form reuses universal media/rich editors, and session-protected CA/ES previews render saved drafts. See [Portfolio CMS](portfolio-cms.md) for exact routes and save fields.
 - `/admin/contact`: complete page copy plus contact-option list/order controls; `/admin/contact/options/create` and per-option edit screens manage bilingual labels, visibility and confirmed deletion.
 
 Phase 2 reuses all Phase 1 models, relationships, migrations, approved seeds, auth and API Resources. No packages or environment variables were added. See [Phase 2 implementation](cms-phase-two.md) for forms, file inventory and verification.
@@ -79,12 +81,14 @@ Content endpoints are GET/HEAD only; content writes return 405. `POST /api/v1/co
 | `/api/v1/site` | `{ "data": { ... } }`: localized settings/shared content and nullable contact/social/media fields |
 | `/api/v1/pages/home` | `{ "data": { ... } }`: localized Home copy, URLs/destinations, ordered `service_summaries` |
 | `/api/v1/pages/about` | `{ "data": { ... } }`: localized copy, ordered `benefits` and `working_method_steps` |
-| `/api/v1/pages/portfolio` | `{ "data": { ... } }`: construction state/copy, optional CTA/LinkedIn; no project details |
+| `/api/v1/pages/portfolio` | `{ "data": { ... } }`: bilingual Portfolio page copy, HTML siblings, compatibility links and construction state |
+| `/api/v1/projects` | Published paginated/filterable projects, page/category metadata; order by sort order then ID |
+| `/api/v1/projects/{slug}` | Published project detail, sanitized HTML body, localized gallery alt/caption, up to three related projects |
 | `POST /api/v1/contact/verify` | `{ "success": true }` only after server-side Cloudflare verification; safe failures and five attempts/minute/IP |
 | `/api/v1/pages/contact` | `{ "data": { ... } }`: localized copy and active, ordered `service_options` |
 | `/api/v1/services` | `{ "data": [ ... ], "meta": { "locale": "ca", "page": { ... } } }`: active ordered services with ordered `features`; localized Services page editorial copy in `meta.page` |
 
-Fields use snake_case. Every record includes `id`; repeatable items include `sort_order`, and services/options/summaries include their stable `slug`. Each translated field resolves to a plain string or null. Media path fields are exposed as `*_url`, not database/storage paths. For example `hero_image_path` becomes `hero_image_url`, and `icon_path` becomes `icon_url`.
+Fields use snake_case. Every record includes `id`; repeatable items include `sort_order`, and services/options/summaries include their stable `slug`. Translated fields resolve to localized strings/null; documented HTML siblings and project body contain sanitized HTML. Media path fields are exposed as `*_url`, not database/storage paths. For example `hero_image_path` becomes `hero_image_url`, and `icon_path` becomes `icon_url`.
 
 Home includes `hero_title`, `hero_content`, `hero_eyebrow`, `hero_image_url`, `hero_image_alt`, `hero_image_caption`, `hero_cta_label`, `hero_cta_destination`, `services_heading`, `services_introduction`, `service_summaries`, `stories_heading`, `stories_introduction`, `portfolio_title`, `portfolio_image_url`, `portfolio_image_alt`, `portfolio_cta_label`, `portfolio_cta_destination`, `cta_title`, `cta_content`, `cta_label`, `cta_destination`. Summaries have `id`, `title`, `description`, `icon`, `icon_url`, `sort_order` and `slug`.
 
@@ -114,7 +118,7 @@ Run `php artisan migrate --no-interaction` to apply `2026_10_12_080514_add_icon_
 
 About children expose localized `content`. Services expose `title`, nullable `subtitle`, `description`, `icon_url`, `active`, `features`. Contact options expose `slug`, `label`, `active`. Portfolio's `linkedin_destination` is null until confirmed; `cta_destination` supports the current internal Home link.
 
-Vue should fetch the backend origin plus these paths, pass its selected locale, read `data`, and handle null contact/social values without inventing links. Split paragraph strings on `\n\n` to preserve the current paragraph layout. Render content as text, not HTML. Internal CTA destinations match existing Vue routes (`/sobre-mi`, `/servicios`, `/portfolio`, `/contacto`). IDs/slugs remain unchanged when switching locale. Stable contact-option slugs match current Vue form choices. UI-only form validation/button labels may remain in Vue's localization resources; editorial copy comes from the API. This phase does not modify or wire up Vue.
+Vue should fetch the backend origin plus these paths, pass its selected locale, read `data`, and handle null contact/social values without inventing links. Split paragraph strings on `\n\n` to preserve the current paragraph layout. Render plain fields as escaped text; use only documented sanitized HTML fields for rich rendering. Internal CTA destinations match existing Vue routes (`/sobre-mi`, `/servicios`, `/portfolio`, `/contacto`). IDs/slugs remain unchanged when switching locale. Stable contact-option slugs match current Vue form choices. UI-only form validation/button labels may remain in Vue's localization resources; editorial copy comes from the API. This phase does not modify or wire up Vue.
 
 CORS applies only to `/api/v1/*`, allows GET/HEAD/POST/OPTIONS, exposes `Content-Language`, and uses `FRONTEND_URL` as the allowed origin. No credentials are needed or allowed. The default example is the inspected local Vue origin, `http://localhost:5173`; production domains are not hardcoded.
 
@@ -144,7 +148,7 @@ docker compose exec -T app vendor/bin/pint --format agent
 
 ## Remaining work and execution status
 
-All current editorial CMS sections are editable after Phase 2. Optional future work includes media transformations, production administrator provisioning or password recovery, and separate Vue API integration. Portfolio project details, SEO and Blog were not implemented. Nothing was deployed and the Vue repository was not modified.
+All current editorial CMS sections are editable after Phase 2. Optional future work includes media transformations, production administrator provisioning or password recovery, and separate Vue API integration. Portfolio project details, captions, previews and global WhatsApp are now complete; SEO beyond existing fields remains outside this task. Blog remains excluded. Nothing was deployed and the Vue repository was not modified.
 
 Final Phase 2 Docker verification: MariaDB `migrate:fresh --seed` passed; PHPUnit passed **201 tests / 754 assertions** (92 added beyond Phase 1); full-project Pint, Composer validation, route listing and Nginx validation passed. Live Nginx requests returned HTTP 200 for admin login and all six public endpoints. Authenticated editor flows are verified by HTTP feature tests, not an interactive browser session. Tests use isolated SQLite in memory; the migration/seed command exercised the actual MariaDB service. No Git metadata is present, so full-project Pint was used rather than `--dirty`.
 
@@ -198,3 +202,12 @@ See [theme-settings.md](theme-settings.md) for the exact public payload, migrati
 See [Universal CMS media library](universal-media-library.md) for the exact audited slot inventory, migrations, picker/save contracts, SVG limitation, API additions, Docker/Plesk storage strategy and actual restart verification. `/admin/media` now browses paginated assets, uploads unassigned files and assigns existing assets; `POST /admin/media` remains admin-only. All existing image-field components delegate to one media picker. Home summaries retain their four presets and also accept custom media. Service features have an additive nullable icon path; Settings has eleven audited shared interface-icon assignments. New public fields are `data.interface_media` on `/api/v1/site` and `features[*].icon_url` on Services. Those static frontend slots await Vue integration; existing media URL consumers remain compatible.
 
 Media assets store metadata only. Selection submits an asset ID and resolves its immutable public path on the server, preserving the existing path-based assignment schema. Unlinking/replacing/deleting content retains library files. Only new uploads from a failed save are discarded. PNG/JPEG/WebP uploads are decoded and re-encoded; arbitrary SVG and AVIF are rejected. Repository-trusted seed SVG assets remain usable. Catalog import and seeding are idempotent and preserve custom assignments. Local additive migrations and an actual app-container restart were verified; nothing was deployed and Vue was not modified.
+
+
+## Portfolio and WhatsApp completion — 2026-10-12
+
+The existing project/category models, migration, API endpoints, reusable media catalog and universal rich editor were audited and reused. No duplicate domain models/routes, dependencies or fake project seeders were introduced. Additions: bilingual plain gallery captions, sorted legacy gallery reads, transactional project-list ordering, authenticated saved-content previews, credential-free rich links and CMS-managed global WhatsApp. The exact public shapes are in [Portfolio API contract](portfolio-api-contract.md); audit, admin routes and local workflow are in [Portfolio CMS](portfolio-cms.md).
+
+New migration `2026_10_12_133107_add_whatsapp_number_to_site_settings_table.php` adds a nullable canonical number defaulting to `+34694229352`. Site API derives `https://wa.me/34694229352` from that number; existing contact, theme and translation values are preserved. Only the verified local Docker MariaDB schema was migrated. Existing Portfolio construction/visibility settings were not changed. No Vue modification or deployment occurred.
+
+Verification: full PHP 8.5 suite passed 518 tests / 2,540 assertions; Pint, strict Composer validation, production asset build, JavaScript syntax, migration status/SQL rehearsal and API/admin route inspection passed. The optional Vite font fallback warning remains. PHPUnit uses isolated SQLite/storage fakes. Local MariaDB exercised the additive migration. `db:table` inspection encountered the existing missing `intl` extension; no dependency/runtime change was made to address that unrelated command limitation.

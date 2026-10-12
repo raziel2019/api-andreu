@@ -2,14 +2,31 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Rules\SupportedRichText;
+use App\Services\RichText;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 
 abstract class CmsFormRequest extends FormRequest
 {
     public function authorize(): bool
     {
         return $this->user()?->can('access-admin') ?? false;
+    }
+
+    public function withValidator(Validator $validator): void
+    {
+        $editorialFields = array_unique(array_merge(...array_values(RichText::FIELDS)));
+        $rules = $validator->getRules();
+        foreach ($rules as $path => &$fieldRules) {
+            $parts = explode('.', $path);
+            if (in_array(end($parts), ['ca', 'es'], true) && in_array($parts[count($parts) - 2] ?? '', $editorialFields, true) && in_array('string', $fieldRules, true)) {
+                $fieldRules[] = new SupportedRichText;
+            }
+        }
+        unset($fieldRules);
+        $validator->setRules($rules);
     }
 
     /** @param list<string> $fields */
