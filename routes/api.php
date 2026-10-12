@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\AboutPageController;
 use App\Http\Controllers\Api\V1\ContactPageController;
+use App\Http\Controllers\Api\V1\ContactSubmissionController;
 use App\Http\Controllers\Api\V1\ContactVerificationController;
 use App\Http\Controllers\Api\V1\HomePageController;
 use App\Http\Controllers\Api\V1\LegalPageController;
@@ -14,6 +15,8 @@ use App\Models\LegalPage;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->middleware(SetApiLocale::class)->group(function (): void {
+    Route::post('/contact', ContactSubmissionController::class)
+        ->middleware('throttle:contact-submission')->name('api.v1.contact.store');
     Route::post('/contact/verify', ContactVerificationController::class)
         ->middleware('throttle:contact-verification')
         ->name('api.v1.contact.verify');
